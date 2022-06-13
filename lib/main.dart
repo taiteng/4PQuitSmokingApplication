@@ -109,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // Navigate to second route when tapped.
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (BuildContext context) => Leaderboard()),
+            MaterialPageRoute(builder: (BuildContext context) => Achievements()),
           );
         },
       ), // This trailing comma makes auto-formatting nicer for build methods.

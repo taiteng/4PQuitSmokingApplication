@@ -1,6 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'achievements.dart';
+import 'leaderboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -101,9 +102,16 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        //onPressed: _incrementCounter,
+        //tooltip: 'Increment',
+        //child: const Icon(Icons.add),
+        onPressed: () {
+          // Navigate to second route when tapped.
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => Achievements()),
+          );
+        },
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

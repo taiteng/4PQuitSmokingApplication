@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'achievements.dart';
+import 'leaderboard.dart';
 
 
 class NavBar extends StatelessWidget {
@@ -52,6 +53,12 @@ class NavBar extends StatelessWidget {
             leading: Icon(Icons.description),
             title: Text('Premium'),
             onTap: () => null,
+          ),
+          ListTile(
+            leading: Icon(Icons.leaderboard),
+            title: Text('Leaderboard'),
+            //onTap: () => null,
+            onTap: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Leaderboard())),
           ),
           Divider(),
           ListTile(

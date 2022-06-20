@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'main.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,7 +54,7 @@ class endSurveyState extends State<endSurvey> {
 
               ),
                 onPressed: (){
-              //Navigator.of(context).push(MaterialPageRoute(builder: (context) => homepage()));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage(title: 'Tween')));
             },
                 child: Text("Proceed",
                 style: TextStyle(

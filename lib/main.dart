@@ -2,10 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'NavBar.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -67,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
               Container(
                 color: Colors.lightBlue,
-                width: 420,
+                width: 400,
                 height: 100,
 
                 child: Row(
@@ -96,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             Container(
               color: Colors.purple,
-              width: 420,
+              width: 390,
               height: 100,
 
               child: Row(
@@ -109,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontWeight: FontWeight. bold,
                     ),
                   ),
-                  Text('\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCigarettes Ignored \n\n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t 0',
+                  Text('\t\t\t\t\t\t\t\t\t\t\t\t\t\tCigarettes Ignored \n\n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t 0',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight. bold,

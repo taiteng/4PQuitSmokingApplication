@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quit_smoking/loginScreen.dart';
 import 'package:quit_smoking/main.dart';
+import 'surveyQ1.dart';
 
 class signUpScreen extends StatefulWidget{
 
@@ -221,7 +222,7 @@ class _signUpScreenState extends State<signUpScreen>{
       width: double.infinity,
       child: RaisedButton(
         elevation: 5,
-        onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>loginScreen()))
+        onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>surveyQ1()))
         ,
         padding: EdgeInsets.all(15),
         shape: RoundedRectangleBorder(

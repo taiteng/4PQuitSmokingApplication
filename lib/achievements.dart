@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'main.dart';
 
 class Achievements extends StatelessWidget {
   const Achievements({Key? key}) : super(key: key);
@@ -25,7 +26,8 @@ class Achievements extends StatelessWidget {
           elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
-            onPressed: () => Navigator.of(context).pop(),
+            //onPressed: () => Navigator.of(context).pop(),
+            onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Tween'))),
           ),
           //actions: [Icon(Icons.grid_view, color: Colors.white,),],
         ),

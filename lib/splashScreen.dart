@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'surveyQ1.dart';
+import 'loginScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen>{
   void initState(){
     super.initState();
     Timer(Duration(seconds:3),(){
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> surveyQ1()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> loginScreen()));
     });
   }
 

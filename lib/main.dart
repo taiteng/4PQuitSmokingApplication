@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
               Container(
                 color: Colors.lightBlue,
-                width: 400,
+                width: 420,
                 height: 100,
 
                 child: Row(
@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             Container(
               color: Colors.purple,
-              width: 390,
+              width: 420,
               height: 100,
 
               child: Row(
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontWeight: FontWeight. bold,
                     ),
                   ),
-                  Text('\t\t\t\t\t\t\t\t\t\t\t\t\t\tCigarettes Ignored \n\n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t 0',
+                  Text('\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCigarettes Ignored \n\n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t 0',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight. bold,

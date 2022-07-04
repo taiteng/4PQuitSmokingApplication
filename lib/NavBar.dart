@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'achievements.dart';
 import 'leaderboard.dart';
+import 'community.dart';
+import 'protips.dart';
+import 'settings.dart';
 
 
 class NavBar extends StatelessWidget {
@@ -42,17 +45,17 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Communinty'),
-            onTap: () => null,
+            onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Community())),
           ),
           ListTile(
             leading: Icon(Icons.share),
             title: Text('Pro Tips'),
-            onTap: () => null,
+            onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Protips())),
           ),
           ListTile(
             leading: Icon(Icons.description),
             title: Text('Premium'),
-            onTap: () => null,
+            onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Premium())),
           ),
           ListTile(
             leading: Icon(Icons.leaderboard),
@@ -64,7 +67,7 @@ class NavBar extends StatelessWidget {
           ListTile(
             title: Text('Settings'),
             leading: Icon(Icons.settings),
-            onTap: () => null,
+            onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Settings())),
           ),
         ],
       ),

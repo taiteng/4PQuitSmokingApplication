@@ -60,10 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
 
       ),
-
-
-
-
       body: SingleChildScrollView(
 
         child: Column(

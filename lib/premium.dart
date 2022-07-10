@@ -21,15 +21,11 @@ class Premium extends StatelessWidget {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          //title: Text('Achievements page'),
-          //centerTitle: true,
           elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
-            //onPressed: () => Navigator.of(context).pop(),
             onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Tween'))),
           ),
-          //actions: [Icon(Icons.grid_view, color: Colors.white,),],
         ),
         body: SingleChildScrollView(
           child: Padding(

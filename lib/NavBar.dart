@@ -4,7 +4,9 @@ import 'achievements.dart';
 import 'leaderboard.dart';
 import 'community.dart';
 import 'protips.dart';
+import 'demo.dart';
 import 'settings.dart';
+import 'premium.dart';
 
 
 class NavBar extends StatelessWidget {
@@ -50,7 +52,7 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.share),
             title: Text('Pro Tips'),
-            onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Protips())),
+            onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Protip())),
           ),
           ListTile(
             leading: Icon(Icons.description),
@@ -68,6 +70,12 @@ class NavBar extends StatelessWidget {
             title: Text('Settings'),
             leading: Icon(Icons.settings),
             onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Settings())),
+          ),
+          ListTile(
+            leading: Icon(Icons.leaderboard),
+            title: Text('Demo'),
+            //onTap: () => null,
+            onTap: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Demo())),
           ),
         ],
       ),

@@ -21,15 +21,11 @@ class Settings extends StatelessWidget {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          //title: Text('Achievements page'),
-          //centerTitle: true,
           elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
-            //onPressed: () => Navigator.of(context).pop(),
             onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Tween'))),
           ),
-          //actions: [Icon(Icons.grid_view, color: Colors.white,),],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -65,42 +61,6 @@ class Settings extends StatelessWidget {
                             //Text("Global", style:TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16.0),),
                           ],
                         ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.0,),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0),
-                    ),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.lightBlue,
-                        Colors.blue.shade100,
-                        Colors.blueAccent,
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.75,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                        ),
-                        color: Colors.white,
-                      ),
-                      child: GridView.count(
-                        crossAxisCount: 3,
-                        childAspectRatio: 0.8,
-                        children: [
-
-                        ],
                       ),
                     ),
                   ),

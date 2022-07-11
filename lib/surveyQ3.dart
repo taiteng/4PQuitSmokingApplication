@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'surveyQ2.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'surveyQ4.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
+Future <void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -30,6 +34,12 @@ class surveyQ3 extends StatefulWidget {
 
 class surveyQ3State extends State<surveyQ3> {
   int _currentValue = 3;
+
+  Future  <void> cigarattesPerDay(String q3) async{
+    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc("p20012449@student.newinti.edu.my");
+    await surveyQuestion.update({"cigarattesPerDay": q3});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +79,10 @@ class surveyQ3State extends State<surveyQ3> {
                 icon: Icon(Icons.arrow_back_ios_rounded),
               ),
               IconButton(onPressed: (){
+                cigarattesPerDay(_currentValue.toString());
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => surveyQ4()));
-              },
+
+                },
                 icon: Icon(Icons.arrow_forward_ios_rounded),
                 alignment: Alignment.centerRight,
               ),

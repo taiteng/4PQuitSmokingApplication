@@ -54,7 +54,7 @@ class endSurveyState extends State<endSurvey> {
 
               ),
                 onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage(title: 'Tween')));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyHomePage(title: 'Tween')));
             },
                 child: Text("Proceed",
                 style: TextStyle(

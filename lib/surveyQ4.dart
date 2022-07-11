@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'surveyQ3.dart';
 import 'package:flutter/cupertino.dart';
 import 'endSurvey.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
+Future <void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -29,6 +33,12 @@ class surveyQ4 extends StatefulWidget {
 }
 
 class surveyQ4State extends State<surveyQ4> {
+  DateTime selectedDate = DateTime.now();
+
+  Future  <void> quitSmokingDate(String q4) async{
+    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc("p20012449@student.newinti.edu.my");
+    await surveyQuestion.update({"quitSmokingDate": q4});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +76,11 @@ class surveyQ4State extends State<surveyQ4> {
                 icon: Icon(Icons.arrow_back_ios_rounded),
               ),
               IconButton(onPressed: (){
+                String trimDate = selectedDate.toString().substring(0, 10);
+                quitSmokingDate(trimDate);
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => endSurvey()));
-              },
+
+                },
                 icon: Icon(Icons.arrow_forward_ios_rounded),
                 alignment: Alignment.centerRight,
               ),
@@ -86,8 +99,9 @@ class surveyQ4State extends State<surveyQ4> {
               height: 200,
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,
-                initialDateTime: DateTime(1950, 1, 1),
-                onDateTimeChanged: (DateTime newDateTime) {
+                initialDateTime: selectedDate,
+                onDateTimeChanged: (DateTime newDate) {
+                  selectedDate = newDate;
                 },
               ),
             ),

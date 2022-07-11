@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'surveyQ2.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
+Future <void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -26,6 +30,15 @@ class surveyQ1 extends StatefulWidget {
 }
 
 class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<surveyQ1>{
+  final q1controller = TextEditingController();
+
+  Future<void> costPerPack(String q1) async{
+    await Firebase.initializeApp();
+    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc("p20012449@student.newinti.edu.my");
+
+    await surveyQuestion.set({"costPerPack": q1});
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -60,8 +73,20 @@ class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<s
                 Container(
                   width: 330,
                 ),
-                IconButton(onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => surveyQ2()));
+                IconButton(onPressed: () async{
+                  final q1 = q1controller.text;
+
+                  if(q1 == ""){
+                    const snackBar = SnackBar(
+                      content: Text('Please make sure you fill in the field'),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }else{
+                    costPerPack(q1);
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => surveyQ2()));
+                  }
+
                 },
                   icon: Icon(Icons.arrow_forward_ios_rounded),
                   alignment: Alignment.centerRight,
@@ -88,26 +113,27 @@ class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<s
             SizedBox(height:20.0),
 
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color:Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: TextField(
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "e.g.  20"
-                      ),
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  border: Border.all(color:Colors.white),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: TextField(
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    controller: q1controller,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "e.g.  20"
                     ),
                   ),
                 ),
+              ),
             ),
-        ],
+          ],
         ),
       ),
     );

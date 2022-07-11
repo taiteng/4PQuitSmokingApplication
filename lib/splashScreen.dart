@@ -1,14 +1,20 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:quit_smoking/main.dart';
 import 'surveyQ1.dart';
 import 'loginScreen.dart';
 
-void main() {
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
 
   // This widget is the root of your application.
   @override
@@ -32,11 +38,25 @@ class SplashScreen extends StatefulWidget{
 
 class _SplashScreenState extends State<SplashScreen>{
   @override
-  void initState(){
+  initState()  {
+
     super.initState();
-    Timer(Duration(seconds:3),(){
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=> loginScreen()));
-    });
+    // FirebaseAuth.instance
+    //     .authStateChanges()
+    //     .listen((User? user) {
+    //   if (user == null) {
+        Timer(Duration(seconds:3),()
+        {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => loginScreen()));
+        });
+       // } else {
+      //   Timer(Duration(seconds:3),(){
+      //     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MyHomePage(title: 'Login',) ), (route) => false);
+      //   });
+      // }
+    //});
+
   }
 
 
@@ -61,7 +81,7 @@ class _SplashScreenState extends State<SplashScreen>{
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class _MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();

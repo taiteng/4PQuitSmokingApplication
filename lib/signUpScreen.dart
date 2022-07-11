@@ -1,8 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:quit_smoking/authenticationService.dart';
 import 'package:quit_smoking/loginScreen.dart';
 import 'package:quit_smoking/main.dart';
 import 'surveyQ1.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
+
 
 class signUpScreen extends StatefulWidget{
 
@@ -12,6 +19,15 @@ class signUpScreen extends StatefulWidget{
 }
 
 class _signUpScreenState extends State<signUpScreen>{
+  bool loading=false;
+  final emailController=TextEditingController();
+  final passwordController=TextEditingController();
+  @override
+  void dispose(){
+    emailController.dispose();
+    super.dispose();
+
+  }
   Widget buildUsername(){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,6 +108,7 @@ class _signUpScreenState extends State<signUpScreen>{
           ),
           height: 60,
           child: TextField(
+            controller: emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
                 color: Colors.black
@@ -144,6 +161,7 @@ class _signUpScreenState extends State<signUpScreen>{
           height: 60,
           child: TextField(
             obscureText: true,
+            controller: passwordController,
             style: TextStyle(
                 color: Colors.black
             ),
@@ -222,8 +240,12 @@ class _signUpScreenState extends State<signUpScreen>{
       width: double.infinity,
       child: RaisedButton(
         elevation: 5,
-        onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>surveyQ1()))
-        ,
+        onPressed: () {
+
+
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => surveyQ1()));
+        },
         padding: EdgeInsets.all(15),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15)
@@ -240,10 +262,63 @@ class _signUpScreenState extends State<signUpScreen>{
       ),
     );
   }
+  Widget buildFacebook(){
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 25),
+      width: double.infinity,
+      child: RaisedButton(
+        elevation: 5,
+        onPressed: ()=>_signUpWithFacebook()
+        ,
+        padding: EdgeInsets.all(15),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15)
+        ),
+        color: Colors.white,
+        child: Text(
+          'Sign Up with Facebook',
+          style: TextStyle(
+              color: Color(0xff5ac18e),
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+      ),
+    );
+  }
+  void _signUpWithFacebook() async{
+    setState((){loading = true;});
+    try{
+      final facebookLoginResult= await FacebookAuth.instance.login();
+      final userData= await FacebookAuth.instance.getUserData();
+      final facebookAuthCredential= FacebookAuthProvider.credential(facebookLoginResult.accessToken!.token);
+      await Firebase.initializeApp();
+      await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+      await FirebaseFirestore.instance.collection('users').add({
+        'email':userData['email'],
+        'imageUrl': userData['picture']['data']['url'],
+        'name': userData['name'],
 
+      });
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MyHomePage(title: 'Login',) ), (route) => false);
+
+    } on Exception catch(e){
+      showDialog(context: context, builder: (context)=>AlertDialog(
+        title: Text('Log in with Facebook failed'),
+        content: Text('Login failed!'+e.toString()),
+        actions: [TextButton(onPressed: (){
+          Navigator.of(context).pop();
+        }, child: Text('Ok'))],
+
+      ));
+    }finally{
+      setState((){loading = false;});
+    }
+  }
   @override
   Widget build(BuildContext context){
     return Scaffold(
+
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -288,7 +363,8 @@ class _signUpScreenState extends State<signUpScreen>{
                         buildPassword(),
                         SizedBox(height: 20),
                         buildReconfirmPassword(),
-                        buildSignUpBtn()
+                        buildSignUpBtn(),
+                        buildFacebook()
                       ],
                     ),
                   )
@@ -301,3 +377,5 @@ class _signUpScreenState extends State<signUpScreen>{
     );
   }
 }
+
+

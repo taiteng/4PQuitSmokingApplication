@@ -288,6 +288,12 @@ class _LoginScreenState extends State<loginScreen>{
           idToken: googleAuth?.idToken
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
+      if(await FacebookAuth.instance.accessToken == null){
+        await FirebaseFirestore.instance.collection('users').add({
+          'email':FirebaseAuth.instance.currentUser?.email,
+          'name':FirebaseAuth.instance.currentUser?.displayName,
+
+        });}
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MyHomePage(title: 'Login',) ), (route) => false);
 
     }on Exception catch(e){

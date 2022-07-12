@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'surveyQ3.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +37,9 @@ class surveyQ4State extends State<surveyQ4> {
   DateTime selectedDate = DateTime.now();
 
   Future  <void> quitSmokingDate(String q4) async{
-    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc("p20012449@student.newinti.edu.my");
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String? uid = user?.uid.toString();
+    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc(uid);
     await surveyQuestion.update({"quitSmokingDate": q4});
   }
 

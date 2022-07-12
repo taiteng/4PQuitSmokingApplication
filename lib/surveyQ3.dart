@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'surveyQ2.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -36,7 +37,9 @@ class surveyQ3State extends State<surveyQ3> {
   int _currentValue = 3;
 
   Future  <void> cigarattesPerDay(String q3) async{
-    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc("p20012449@student.newinti.edu.my");
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String? uid = user?.uid.toString();
+    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc(uid);
     await surveyQuestion.update({"cigarattesPerDay": q3});
   }
 

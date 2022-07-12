@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quit_smoking/surveyQ1.dart';
 import 'surveyQ1.dart';
@@ -37,7 +38,9 @@ class surveyQ2State extends State<surveyQ2> with AutomaticKeepAliveClientMixin<s
   int _currentValue = 10;
 
   Future <void> quantityPerPack(String q2) async{
-    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc("p20012449@student.newinti.edu.my");
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String? uid = user?.uid.toString();
+    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc(uid);
     await surveyQuestion.update({"quantityPerPack": q2});
 
   }

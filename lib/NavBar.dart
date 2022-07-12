@@ -72,10 +72,9 @@ class NavBar extends StatelessWidget {
             onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Settings())),
           ),
           ListTile(
-            leading: Icon(Icons.leaderboard),
+            leading: Icon(Icons.airplanemode_on_rounded),
             title: Text('Demo'),
-            //onTap: () => null,
-            onTap: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Demo())),
+            onTap: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>ChatDetailPage())),
           ),
         ],
       ),

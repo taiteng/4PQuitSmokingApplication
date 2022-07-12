@@ -1,7 +1,15 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quit_smoking/main.dart';
 import 'package:quit_smoking/signUpScreen.dart';
+
+
 
 class loginScreen extends StatefulWidget{
 
@@ -12,7 +20,9 @@ class loginScreen extends StatefulWidget{
 
 
 class _LoginScreenState extends State<loginScreen>{
+  GoogleSignIn _googleSignIn=GoogleSignIn(scopes: ['email']);
   bool isRememberMe=false;
+  bool loading=false;
   Widget buildEmail(){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,9 +228,122 @@ class _LoginScreenState extends State<loginScreen>{
     );
   }
 
+  Widget buildFacebook(){
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 25),
+      width: double.infinity,
+      child: RaisedButton(
+        elevation: 5,
+        onPressed: ()=>_loginWithFacebook()
+        ,
+        padding: EdgeInsets.all(15),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15)
+        ),
+        color: Colors.white,
+        child: Text(
+          'Login with Facebook',
+          style: TextStyle(
+              color: Color(0xff5ac18e),
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildGoogle(){
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 25),
+      width: double.infinity,
+      child: RaisedButton(
+        elevation: 5,
+        onPressed: ()=>_loginWithGoogle()
+        ,
+        padding: EdgeInsets.all(15),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15)
+        ),
+        color: Colors.white,
+        child: Text(
+          'Login with Google',
+          style: TextStyle(
+              color: Color(0xff5ac18e),
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _loginWithGoogle() async{
+    setState((){loading = true;});
+    try {
+      final newuser = await _googleSignIn.signIn();
+      final googleAuth = await newuser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken
+      );
+      
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      if(await FacebookAuth.instance.accessToken == null){
+        await FirebaseFirestore.instance.collection('users').add({
+          'email':FirebaseAuth.instance.currentUser?.email,
+          'name':FirebaseAuth.instance.currentUser?.displayName,
+
+        });}
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MyHomePage(title: 'Login',) ), (route) => false);
+
+    }on Exception catch(e){
+      showDialog(context: context, builder: (context)=>AlertDialog(
+        title: Text('Log in with Google failed'),
+        content: Text(e.toString()),
+        actions: [TextButton(onPressed: (){
+          Navigator.of(context).pop();
+        }, child: Text('Ok'))],
+
+      ));
+    }
+
+  }
+
+
+
+  void _loginWithFacebook() async{
+    setState((){loading = true;});
+    try{
+      final facebookLoginResult= await FacebookAuth.instance.login();
+      final userData= await FacebookAuth.instance.getUserData();
+      final facebookAuthCredential= FacebookAuthProvider.credential(facebookLoginResult.accessToken!.token);
+      await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+      if(await FacebookAuth.instance.accessToken == null){
+      await FirebaseFirestore.instance.collection('users').add({
+        'email': userData['email'],
+        'name': userData['name']
+
+       });}
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MyHomePage(title: 'Login',) ), (route) => false);
+
+    } on Exception catch(e){
+      showDialog(context: context, builder: (context)=>AlertDialog(
+        title: Text('Log in with Facebook failed'),
+        content: Text('Login failed!'),
+        actions: [TextButton(onPressed: (){
+          Navigator.of(context).pop();
+        }, child: Text('Ok'))],
+
+      ));
+    }finally{
+      setState((){loading = false;});
+    }
+  }
   @override
   Widget build(BuildContext context){
     return Scaffold(
+
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -264,7 +387,9 @@ class _LoginScreenState extends State<loginScreen>{
                       buildRemember(),
                       buildForgotPass(),
                       buildLoginBtn(),
-                      buildSignUp()
+                      buildSignUp(),
+                      buildFacebook(),
+                      buildGoogle(),
                     ],
                   ),
                 )

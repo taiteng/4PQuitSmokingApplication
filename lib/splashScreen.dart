@@ -41,21 +41,21 @@ class _SplashScreenState extends State<SplashScreen>{
   initState()  {
 
     super.initState();
-    // FirebaseAuth.instance
-    //     .authStateChanges()
-    //     .listen((User? user) {
-    //   if (user == null) {
+    FirebaseAuth.instance
+        .authStateChanges()
+        .listen((User? user) {
+      if (user == null) {
         Timer(Duration(seconds:3),()
         {
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => loginScreen()));
         });
-       // } else {
-      //   Timer(Duration(seconds:3),(){
-      //     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MyHomePage(title: 'Login',) ), (route) => false);
-      //   });
-      // }
-    //});
+       } else {
+        Timer(Duration(seconds:3),(){
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MyHomePage(title: 'Login',) ), (route) => false);
+        });
+      }
+    });
 
   }
 

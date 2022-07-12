@@ -287,6 +287,7 @@ class _LoginScreenState extends State<loginScreen>{
           accessToken: googleAuth?.accessToken,
           idToken: googleAuth?.idToken
       );
+      
       await FirebaseAuth.instance.signInWithCredential(credential);
       if(await FacebookAuth.instance.accessToken == null){
         await FirebaseFirestore.instance.collection('users').add({

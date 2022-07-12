@@ -1,10 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quit_smoking/surveyQ1.dart';
 import 'surveyQ1.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'surveyQ3.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
+Future <void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -32,8 +37,17 @@ class surveyQ2 extends StatefulWidget {
 class surveyQ2State extends State<surveyQ2> with AutomaticKeepAliveClientMixin<surveyQ2>{
   int _currentValue = 10;
 
+  Future <void> quantityPerPack(String q2) async{
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String? uid = user?.uid.toString();
+    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc(uid);
+    await surveyQuestion.update({"quantityPerPack": q2});
+
+  }
+
   @override
   Widget build(BuildContext context) {
+
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +84,9 @@ class surveyQ2State extends State<surveyQ2> with AutomaticKeepAliveClientMixin<s
                 icon: Icon(Icons.arrow_back_ios_rounded),
               ),
               IconButton(onPressed: (){
+                quantityPerPack(_currentValue.toString());
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => surveyQ3()));
+
               },
                 icon: Icon(Icons.arrow_forward_ios_rounded),
                 alignment: Alignment.centerRight,

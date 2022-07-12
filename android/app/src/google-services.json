@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "671699410779",
+    "firebase_url": "https://quitsmoking-60b2b-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "quitsmoking-60b2b",
+    "storage_bucket": "quitsmoking-60b2b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671699410779:android:44b1d22fc2af10cb39847e",
+        "android_client_info": {
+          "package_name": "com.example.quit_smoking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671699410779-ckcf77n72dmvnb8r5aa19kb54g73b2aq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quit_smoking",
+            "certificate_hash": "239a959a7a04cbf78308e616f73d8c280adf698a"
+          }
+        },
+        {
+          "client_id": "671699410779-2q5h8j2i27eipv2aht3s4boa2cmm2r9h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi_7t8QLTryxN8NVu06VPju-BvZoXujVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671699410779-2q5h8j2i27eipv2aht3s4boa2cmm2r9h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

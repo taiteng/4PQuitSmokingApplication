@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'main.dart';
 
-class Community extends StatelessWidget {
-  const Community({Key? key}) : super(key: key);
+class Achievementstest extends StatelessWidget {
+  const Achievementstest({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +24,7 @@ class Community extends StatelessWidget {
           elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
+            //onPressed: () => Navigator.of(context).pop(),
             onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Tween'))),
           ),
         ),
@@ -56,7 +57,7 @@ class Community extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Community", style:TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 16.0),),
+                            Text("Achievement", style:TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 16.0),),
                             //Text("Total Achievements Earned", style:TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16.0),),
                             //Text("Global", style:TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16.0),),
                           ],
@@ -95,7 +96,21 @@ class Community extends StatelessWidget {
                         crossAxisCount: 3,
                         childAspectRatio: 0.8,
                         children: [
-
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: false),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: false),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: false),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: false),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
+                          AchievementList(img: 'assets/images/nft1.jpg', msg: 'What', isOwned: true),
                         ],
                       ),
                     ),
@@ -104,6 +119,56 @@ class Community extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class AchievementList extends StatelessWidget{
+
+  final String img;
+  final String msg;
+  final bool isOwned;
+
+  const AchievementList({Key? key, required this.img, required this.msg, required this.isOwned}): super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(15.0),
+          border: Border.all(
+            width: 3,
+            color: Colors.grey.shade300,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50.0),
+                  border: Border.all(color: Colors.blueGrey),
+                ),
+                child: ClipOval(
+                  clipBehavior: Clip.antiAlias,
+                  child: Image.asset(img, height: 100, width: 100, fit: BoxFit.cover,),
+                ),
+              ),
+            ),
+            Center(
+              child: Container(
+                child: Text(msg, style: TextStyle(color: Colors.black54,),),
+              ),
+            ),
+          ],
         ),
       ),
     );

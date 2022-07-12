@@ -1,113 +1,76 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
 import 'main.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Protips extends StatelessWidget {
-  const Protips({Key? key}) : super(key: key);
+class Protip extends StatelessWidget {
+  const Protip({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.red.shade100,
-            Colors.redAccent,
-            Colors.red,
-          ],
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          //title: Text('Achievements page'),
-          //centerTitle: true,
-          elevation: 0.0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
-            //onPressed: () => Navigator.of(context).pop(),
-            onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Tween'))),
-          ),
-          //actions: [Icon(Icons.grid_view, color: Colors.white,),],
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.lightBlue,
-                        Colors.blue,
-                        Colors.blueAccent,
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Container(
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: Colors.white,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Pro Tips", style:TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 16.0),),
-                            //Text("Total Achievements Earned", style:TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16.0),),
-                            //Text("Global", style:TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16.0),),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.0,),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0),
-                    ),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.lightBlue,
-                        Colors.blue.shade100,
-                        Colors.blueAccent,
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.75,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                        ),
-                        color: Colors.white,
-                      ),
-                      child: GridView.count(
-                        crossAxisCount: 3,
-                        childAspectRatio: 0.8,
-                        children: [
+    return const MaterialApp(
+      debugShowMaterialGrid: false,
+      debugShowCheckedModeBanner: false,
+      home: PTPage(),
+    );
+  }
+}
 
-                        ],
-                      ),
+class PTPage extends StatefulWidget {
+  const PTPage({Key? key}) : super(key: key);
+
+  @override
+  _PTState createState() => _PTState();
+}
+
+class _PTState extends State<PTPage> {
+  final CollectionReference _protips =
+  FirebaseFirestore.instance.collection('protips');
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      // Remove the debug banner
+      debugShowCheckedModeBanner: false,
+      debugShowMaterialGrid: false,
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+             icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
+             onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Tween'))),
+           ),
+          title: const Text('Pro Tips'),
+          centerTitle: true,
+        ),
+        // Using StreamBuilder to display all products from Firestore in real-time
+        body: StreamBuilder(
+          stream: _protips.snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            if (streamSnapshot.hasData) {
+              return ListView.builder(
+                itemCount: streamSnapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final DocumentSnapshot documentSnapshot =
+                  streamSnapshot.data!.docs[index];
+                  return Card(
+                    elevation: 3.0,
+                    margin: const EdgeInsets.all(10),
+                    child: ListTile(
+                      title: Text(documentSnapshot['title']),
+                      subtitle: Text(documentSnapshot['desc']),
                     ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                  );
+                },
+              );
+            }
+
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         ),
       ),
     );

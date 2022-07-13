@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'NavBar.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -48,368 +48,179 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+
+  final CollectionReference _surveyss =
+  FirebaseFirestore.instance.collection('surveys');
+
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: Colors.grey[500],
       drawer:  NavBar(),
       appBar: AppBar(
         backgroundColor: Colors.red[600],
-        title: Text(widget.title),
         centerTitle: true,
-
+        title: const Text('Tween'),
       ),
+      // Using StreamBuilder to display all surveys from Firestore in real-time
+      body: StreamBuilder(
+        stream: _surveyss.snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          if (streamSnapshot.hasData) {
+            return ListView.builder(
+              itemCount: streamSnapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                final DocumentSnapshot documentSnapshot =
+                streamSnapshot.data!.docs[index];
 
+                return Card(
+                  child: Column(
+                      children: <Widget>[
+                        Container(
+                          color: Colors.cyan,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
 
-
-
-      body: SingleChildScrollView(
-
-        child: Column(
-          children: <Widget>[
-
-              Container(
-                color: Colors.lightBlue,
-                width: 420,
-                height: 100,
-
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                    children: <Widget>[
-                      Text('  Money Saved \n\n \t\t\t\t\t\t\t\t\t 0',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight. bold,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    Text(documentSnapshot['cigarattesPerDay'].toString(), style: TextStyle(fontSize: 60)),
+                                    Text("Saved", style: TextStyle(fontSize: 20)),
+                                  ],
+                                ),
+                                Container(
+                                  height: 80,
+                                  child: VerticalDivider(
+                                    color: Colors.white,
+                                    thickness: 5,
+                                  ),
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    Text(documentSnapshot['costPerPack'].toString(), style: TextStyle(fontSize: 60)),
+                                    Text("Cost", style: TextStyle(fontSize: 20)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                      Lottie.network('https://assets8.lottiefiles.com/packages/lf20_i0mxtka6.json',width: 110,height: 110),
-                      Text('Total Achivement \n\n \t\t\t\t\t\t\t\t\t\t\t\t\t 0',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight. bold,
+
+                        SizedBox(height: 5),
+
+                        Container(
+                          color: Colors.red,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    Text(documentSnapshot['quantityPerPack'].toString(), style: TextStyle(fontSize: 60)),
+                                    Text("Saved", style: TextStyle(fontSize: 20)),
+                                  ],
+                                ),
+                                Container(
+                                  height: 80,
+                                  child: VerticalDivider(
+                                    color: Colors.white,
+                                    thickness: 5,
+                                  ),
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    Text(documentSnapshot['quantityPerPack'].toString(), style: TextStyle(fontSize: 60)),
+                                    Text("Achivement", style: TextStyle(fontSize: 20)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+
                         ),
-                      ),
-                  ],
-                ),
-              ),
 
-            SizedBox(height: 20),
-
-            Container(
-              color: Colors.purple,
-              width: 420,
-              height: 100,
-
-              child: Row(
-
-                children: <Widget>[
-
-                  Text('    Life Won \n\n \t\t\t\t\t\t 0',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                  Text('\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCigarettes Ignored \n\n \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t 0',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-
-            SizedBox(height: 20),
-
-            Container(
-              color: Colors.yellow,
-              width: 420,
-              height: 50,
-
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                    Text('You have stopped smoking for',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight. bold,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-
-
-            Container(
-              color: Colors.yellow,
-              width: 420,
-              height: 50,
-
-              child: Row(
-
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-
-                children: <Widget>[
-                  Text('0',textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                  Text('0',textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                  Text('0',textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
-
-
-            Container(
-              color: Colors.yellow,
-              width: 420,
-              height: 50,
-
-              child: Row(
-
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-
-                children: <Widget>[
-                  Text('     Days',textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                  Text('Hours',textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                  Text('Minutes',textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                  Icon(Icons.share),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 20),
-
-            Container(
-              color: Colors.lightGreenAccent,
-              width: 420,
-              height: 25,
-
-
-              child:Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                children: <Widget>[
-                  Text('Achivement              \n\n \t\t\t\t\t\t\t\t\t',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                  Text('                 See More \n\n',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                ],
-              ),
-
-            ),
-
-
-            Container(
-              color: Colors.lightGreenAccent,
-              width: 420,
-              height: 50,
-              child:Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                children: <Widget>[
-                  Text('XXXXXXXXXXXXXXXXXXXXXXXXX',
-                    style: TextStyle(
-                      fontSize: 20,
-                      backgroundColor: Colors.red[100]
-                    ),
-                  ),
-                  Icon(Icons.share),
-                ],
-              ),
-            ),
-
-            Container(
-              color: Colors.lightGreenAccent,
-              width: 420,
-              height: 50,
-              child:Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                children: <Widget>[
-                  Text('XXXXXXXXXXXXXXXXXXXXXXXXX',
-                    style: TextStyle(
-                        fontSize: 20,
-                        backgroundColor: Colors.red[100]
-                    ),
-                  ),
-                  Icon(Icons.share),
-                ],
-              ),
-            ),
-
-            Container(
-              color: Colors.lightGreenAccent,
-              width: 420,
-              height: 50,
-              child:Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                children: <Widget>[
-                  Text('XXXXXXXXXXXXXXXXXXXXXXXXX',
-                    style: TextStyle(
-                        fontSize: 20,
-                        backgroundColor: Colors.red[100]
-                    ),
-                  ),
-                  Icon(Icons.share),
-                ],
-              ),
-            ),
-
-
-            SizedBox(height: 20),
-
-
-            Container(
-              color: Colors.pink,
-              width: 420,
-              height: 25,
-
-
-              child:Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                children: <Widget>[
-                  Text('Pro Tips                     \n\n \t\t\t\t\t\t\t\t\t',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                  Text('                 See More \n\n',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-
-            Container(
-              color: Colors.pink,
-              width: 420,
-              height: 50,
-
-
-              child:Row(
-
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                children: <Widget>[
-                  Text('XXXXXXXXXXXXXXXXXXXXXXXXXX',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  Icon(Icons.share),
-                ],
-              ),
-            ),
-
-
-            SizedBox(height: 20),
-
-
-            Container(
-              color: Colors.orange,
-              width: 420,
-              height: 150,
-
-              child: Row(
-                children: <Widget>[
-                  Lottie.network('https://assets4.lottiefiles.com/packages/lf20_ik4jyixs.json',width: 110,height: 110),
-                  Text('\t\t Community\n\n \t Name  \n\n \t XXXXXXXXXXXXXX',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
-
-
-            SizedBox(height: 20),
-
-            Container(
-              color: Colors.green,
-              width: 420,
-              height: 80,
-
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text('Google Ads Banner',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight. bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-
-
-
-
-
-          ],
-        ),
-
-
-
+                        SizedBox(height: 5),
+
+                        Container(
+                          color: Colors.green,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    Text(documentSnapshot['quitSmokingDate'].toString(), style: TextStyle(fontSize: 60)),
+                                    Text("quitSmokingDate", style: TextStyle(fontSize: 20)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 15),
+                        ListTile(
+                            tileColor: Colors.yellow,
+                            title: Text('Achievement'),
+                            subtitle: Text('5'),
+                            leading: const Icon(Icons.favorite),
+                            onTap: () => print("ListTile")
+                        ),
+
+                        SizedBox(height: 15),
+                        ListTile(
+                            tileColor: Colors.orange,
+                            title: Text('Pro Tips'),
+                            trailing: const Icon(Icons.share),
+                            subtitle: Text('blablablablablablbalbalbab'),
+                            onTap: () => print("ListTile")
+                        ),
+
+
+                        SizedBox(height: 15),
+                        ListTile(
+                            tileColor: Colors.purpleAccent,
+                            title: Text('Community'),
+                            leading: const Icon(Icons.person),
+                            subtitle: Text('blablablablablablbalbalbab'),
+                            onTap: () => print("ListTile")
+                        ),
+
+
+                        SizedBox(height: 15),
+                        ListTile(
+                            tileColor: Colors.grey,
+                            title: Text('Google Ads'),
+                            subtitle: Text('blablablablablablbalbalbab'),
+                            onTap: () => print("ListTile")
+                        ),
+                      ]),
+                );
+
+
+
+              },
+            );
+
+
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
+      // Add new product
     );
   }
+
+
+
+
 }

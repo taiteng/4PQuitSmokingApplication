@@ -51,7 +51,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
+                      children: [
                         Text("Community",style: TextStyle( fontSize: 16 ,fontWeight: FontWeight.w600),),
                       ],
                     ),
@@ -62,7 +62,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           ),
         ),
       body: Stack(
-        children: <Widget>[
+        children: [
           ListView.builder(
             itemCount: messages.length,
             shrinkWrap: true,

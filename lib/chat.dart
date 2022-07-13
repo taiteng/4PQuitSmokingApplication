@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatMessage{
@@ -14,4 +12,22 @@ List<ChatMessage> messages = [
   ChatMessage(messageContent: "Hey Kriss, I am doing fine dude. wbu?", messageType: "sender"),
   ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
   ChatMessage(messageContent: "Is there any thing wrong?", messageType: "sender"),
+
+
 ];
+
+displayMessages(){
+  FirebaseFirestore.instance.collection('chat').get().then((value) {
+    value.docs.forEach((result) {
+      print(result.get("uid"));
+      if(result.get("uid") == "z9KAl1swgqbtdk1BOEMPIUVVRyz1"){
+        ChatMessage(messageContent: result.get('message'), messageType: "receiver");
+      }
+      else{
+        ChatMessage(messageContent: result.get('message'), messageType: "sender");
+      }
+    },
+    );
+  },
+  );
+}

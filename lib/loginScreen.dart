@@ -34,7 +34,6 @@ class _LoginScreenState extends State<loginScreen>{
               fontSize: 16,
               fontWeight: FontWeight.bold
           ),
-
         ),
         SizedBox(height: 10),
         Container(

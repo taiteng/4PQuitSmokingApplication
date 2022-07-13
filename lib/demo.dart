@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'chat.dart';
 import 'main.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,8 +12,18 @@ class ChatDetailPage extends StatefulWidget{
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
 
-  final CollectionReference _protips =
-  FirebaseFirestore.instance.collection('protips');
+  final _SendMessage = TextEditingController();
+
+  final CollectionReference _chat =
+  FirebaseFirestore.instance.collection('chat');
+
+  Future<void> sendMessage(String msg) async{
+    await Firebase.initializeApp();
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String? uid = user?.uid.toString();
+
+    await _chat.add({"message": msg, "uid": uid});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +51,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
+                      children: [
                         Text("Community",style: TextStyle( fontSize: 16 ,fontWeight: FontWeight.w600),),
                       ],
                     ),
@@ -51,7 +62,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           ),
         ),
       body: Stack(
-        children: <Widget>[
+        children: [
           ListView.builder(
             itemCount: messages.length,
             shrinkWrap: true,
@@ -99,6 +110,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   SizedBox(width: 15,),
                   Expanded(
                     child: TextField(
+                      controller: _SendMessage,
                       decoration: InputDecoration(
                           hintText: "Write message...",
                           hintStyle: TextStyle(color: Colors.black54),
@@ -108,11 +120,24 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   ),
                   SizedBox(width: 15,),
                   FloatingActionButton(
-                    onPressed: (){},
                     child: Icon(Icons.send,color: Colors.white,size: 18,),
                     backgroundColor: Colors.blue,
                     elevation: 0,
-                  ),
+                    onPressed: () async{
+                      final String msg = _SendMessage.text;
+
+                      if(msg == ""){
+                        const snackBar = SnackBar(
+                          content: Text('Please input smtg...'),
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }else{
+                        sendMessage(msg);
+                      }
+
+                      },
+                    ),
                 ],
 
               ),

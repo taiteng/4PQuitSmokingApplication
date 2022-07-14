@@ -53,8 +53,7 @@ class _PTState extends State<PTPage> {
               return ListView.builder(
                 itemCount: streamSnapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  final DocumentSnapshot documentSnapshot =
-                  streamSnapshot.data!.docs[index];
+                  final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
                   return Card(
                     elevation: 3.0,
                     margin: const EdgeInsets.all(10),

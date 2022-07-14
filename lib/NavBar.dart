@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'achievements.dart';
 import 'leaderboard.dart';
 import 'protips.dart';
@@ -6,6 +5,10 @@ import 'chat.dart';
 import 'settings.dart';
 import 'premium.dart';
 import 'demo.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'main.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NavBar extends StatelessWidget {
@@ -29,14 +32,17 @@ class NBPage extends StatefulWidget {
 }
 
 class _NBState extends State<NBPage> {
+  final User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Container(
-        color: Colors.transparent,
+    return Align(
+      alignment: Alignment.topLeft,
+      widthFactor: 0.7,
+      child: Drawer(
         child: ListView(
           // Remove padding
-          padding: EdgeInsets.only(right: 100),
+          padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
               accountName: Text('Oflutter.com'),
@@ -62,7 +68,6 @@ class _NBState extends State<NBPage> {
             ListTile(
               leading: Icon(Icons.favorite),
               title: Text('Achievement'),
-              //onTap: () => Achievements(),
               onTap: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Achievements())),
             ),
             ListTile(

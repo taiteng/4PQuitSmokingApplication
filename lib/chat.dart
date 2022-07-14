@@ -174,9 +174,9 @@ class _ChatState extends State<ChatPage> {
                           const snackBar = SnackBar(
                             content: Text('Please input smtg...'),
                           );
-
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }else{
+                          _SendMessage.clear();
                           sendMessage(msg);
                         }
 

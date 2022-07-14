@@ -21,8 +21,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     await Firebase.initializeApp();
     final User? user = FirebaseAuth.instance.currentUser;
     final String? uid = user?.uid.toString();
+    final String? uname = user?.displayName.toString();
 
-    await _chat.add({"message": msg, "uid": uid});
+    await _chat.add({"message": msg, "uid": uid, "uname": uname});
   }
 
   @override

@@ -18,16 +18,18 @@ Future displayMessages() async {
 
   FirebaseFirestore.instance.collection('chat').get().then((value) {
     value.docs.forEach((result) {
+      String receiverr = "David";
+      String senderr = "E Soon";
       String msg = result.get("message").toString();
       String uid = result.get("uid").toString();
       print(uid);
 
       if(uid == "z9KAl1swgqbtdk1BOEMPIUVVRyz1"){
-        ChatMessage chat = new ChatMessage(username: "E Soon", messageContent: msg, messageType: sender);
+        ChatMessage chat = new ChatMessage(username: senderr, messageContent: msg, messageType: sender);
         messages.add(chat);
       }
       else{
-        ChatMessage chat = new ChatMessage(username: "David", messageContent: msg, messageType: receiver);
+        ChatMessage chat = new ChatMessage(username: receiverr, messageContent: msg, messageType: receiver);
         messages.add(chat);
       }
     },

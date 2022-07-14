@@ -1,4 +1,4 @@
-
+import 'temp.dart';
 import 'package:flutter/material.dart';
 import 'achievements.dart';
 import 'leaderboard.dart';
@@ -74,7 +74,7 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.airplanemode_on_rounded),
             title: Text('Demo'),
-            onTap: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>ChatDetailPage())),
+            onTap: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Chat())),
           ),
         ],
       ),

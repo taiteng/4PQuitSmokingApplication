@@ -1,30 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatMessage{
+  String username;
   String messageContent;
   String messageType;
-  ChatMessage({required this.messageContent, required this.messageType});
+  ChatMessage({required this.username, required this.messageContent, required this.messageType});
 }
 
 List<ChatMessage> messages = [
-  ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-  ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-  ChatMessage(messageContent: "Hey Kriss, I am doing fine dude. wbu?", messageType: "sender"),
-  ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-  ChatMessage(messageContent: "Is there any thing wrong?", messageType: "sender"),
-
-
+  ChatMessage(username: "E Soon", messageContent: "Hi", messageType: "sender"),
+  ChatMessage(username: "David", messageContent: "How r u", messageType: "receiver"),
 ];
 
-displayMessages(){
+Future displayMessages() async {
+  String sender = "sender";
+  String receiver = "receiver";
+
   FirebaseFirestore.instance.collection('chat').get().then((value) {
     value.docs.forEach((result) {
-      print(result.get("uid"));
-      if(result.get("uid") == "z9KAl1swgqbtdk1BOEMPIUVVRyz1"){
-        ChatMessage(messageContent: result.get('message'), messageType: "receiver");
+      String msg = result.get("message").toString();
+      String uid = result.get("uid").toString();
+      print(uid);
+
+      if(uid == "z9KAl1swgqbtdk1BOEMPIUVVRyz1"){
+        ChatMessage chat = new ChatMessage(username: "E Soon", messageContent: msg, messageType: sender);
+        messages.add(chat);
       }
       else{
-        ChatMessage(messageContent: result.get('message'), messageType: "sender");
+        ChatMessage chat = new ChatMessage(username: "David", messageContent: msg, messageType: receiver);
+        messages.add(chat);
       }
     },
     );

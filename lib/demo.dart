@@ -79,7 +79,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                       color: (messages[index].messageType  == "receiver"?Colors.grey.shade200:Colors.blue[200]),
                     ),
                     padding: EdgeInsets.all(16),
-                    child: Text(messages[index].messageContent, style: TextStyle(fontSize: 15),),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(messages[index].username, style: TextStyle(fontSize: 15),),
+                        Text(messages[index].messageContent, style: TextStyle(fontSize: 15),),
+                      ],
+                    ),
                   ),
                 ),
               );

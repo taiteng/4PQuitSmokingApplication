@@ -166,15 +166,17 @@ class _ChatState extends State<ChatPage> {
                       backgroundColor: Colors.blue,
                       elevation: 0,
                       onPressed: () async{
+                        FocusManager.instance.primaryFocus?.unfocus();
+
                         final String msg = _SendMessage.text;
 
                         if(msg == ""){
                           const snackBar = SnackBar(
                             content: Text('Please input smtg...'),
                           );
-
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }else{
+                          _SendMessage.clear();
                           sendMessage(msg);
                         }
 

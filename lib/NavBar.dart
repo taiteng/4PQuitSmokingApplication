@@ -5,6 +5,7 @@ import 'chat.dart';
 import 'settings.dart';
 import 'premium.dart';
 import 'demo.dart';
+import 'userInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'main.dart';
@@ -32,7 +33,6 @@ class NBPage extends StatefulWidget {
 }
 
 class _NBState extends State<NBPage> {
-  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +45,13 @@ class _NBState extends State<NBPage> {
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text('Oflutter.com'),
-              accountEmail: Text('example@gmail.com'),
+              //accountName: Text('Oflutter.com'),
+              accountName: Text(getUserInfo().getUName().toString()),
+              accountEmail: Text(getUserInfo().getUEmail().toString()),
               currentAccountPicture: CircleAvatar(
                 child: ClipOval(
                   child: Image.network(
-                    'https://oflutter.com/wp-content/uploads/2021/02/girl-profile.png',
+                    getUserInfo().getUImg().toString(),
                     fit: BoxFit.cover,
                     width: 90,
                     height: 90,

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'userInfo.dart';
 
 class Chats extends StatelessWidget {
   const Chats({Key? key}) : super(key: key);
@@ -31,12 +32,7 @@ class _ChatState extends State<ChatPage> {
   FirebaseFirestore.instance.collection('chat');
 
   Future<void> sendMessage(String msg) async{
-    await Firebase.initializeApp();
-    final User? user = FirebaseAuth.instance.currentUser;
-    final String? uid = user?.uid.toString();
-    final String? uname = user?.displayName.toString();
-
-    await _chat.add({"message": msg, "uid": uid, "uname": uname});
+    await _chat.add({"message": msg, "uid": getUserInfo().getUID().toString(), "uname": getUserInfo().getUID().toString()});
   }
 
   @override
@@ -64,15 +60,13 @@ class _ChatState extends State<ChatPage> {
               stream: _chat.snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                 if (streamSnapshot.hasData) {
-                  final User? user = FirebaseAuth.instance.currentUser;
-                  final String? uid = user?.uid.toString();
                   return ListView.builder(
                     itemCount: streamSnapshot.data!.docs.length,
                     shrinkWrap: true,
                     padding: EdgeInsets.only(top: 10,bottom: 60),
                     itemBuilder: (context, index){
                       final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
-                      if(documentSnapshot["uid"]  != uid){
+                      if(documentSnapshot["uid"]  != getUserInfo().getUID().toString()){
                         return Container(
                           padding: EdgeInsets.only(left: 14,right: 14,top: 10,bottom: 10),
                           child: Align(

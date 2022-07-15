@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'userInfo.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -30,7 +31,7 @@ class _ProState extends State<ProPage> {
 
   // Deleteing a product by id
   Future<void> ToPro() async {
-    FirebaseFirestore.instance.collection('user').doc("tS2qOJ5Pe8WY1sd6EvaQ7WdnYYP2").update({'isPro': true});
+    FirebaseFirestore.instance.collection('users').doc(getUserInfo().getUID().toString()).update({'isPro': true});
 
     // Show a snackbar
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -143,6 +144,7 @@ class _ProState extends State<ProPage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text("Benefits of being a PRO user", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
+                                Text("RM 20", style: TextStyle(color: Colors.black54,),),
                                 Text("No Ads", style: TextStyle(color: Colors.black54,),),
                                 Text("Unlock more achievements and the ability to create new achievements", style: TextStyle(color: Colors.black54,),),
                                 IconButton(

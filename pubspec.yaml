@@ -42,6 +42,7 @@ dependencies:
   provider: ^4.3.2+1
   flutter_facebook_auth: ^4.3.4+2
   google_sign_in: ^5.4.0
+  flutter_gherkin: ^2.0.0
   #paypal
   http_auth: ^1.0.1
   webview_flutter: ^3.0.4

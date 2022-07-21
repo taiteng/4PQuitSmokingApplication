@@ -32,7 +32,8 @@ class _ChatState extends State<ChatPage> {
   FirebaseFirestore.instance.collection('chat');
 
   Future<void> sendMessage(String msg) async{
-    await _chat.add({"message": msg, "uid": getUserInfo().getUID().toString(), "uname": getUserInfo().getUID().toString()});
+    DateTime now = DateTime.now();
+    await _chat.add({"message": msg, "uid": getUserInfo().getUID().toString(), "uname": getUserInfo().getUID().toString(), "time": now});
   }
 
   @override
@@ -57,7 +58,8 @@ class _ChatState extends State<ChatPage> {
         body: Stack(
           children: [
             StreamBuilder(
-              stream: _chat.snapshots(),
+              //stream: _chat.snapshots(),
+              stream: FirebaseFirestore.instance.collection('chat').orderBy('time', descending: false).snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                 if (streamSnapshot.hasData) {
                   return ListView.builder(

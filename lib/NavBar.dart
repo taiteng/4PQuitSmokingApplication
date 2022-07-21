@@ -45,7 +45,6 @@ class _NBState extends State<NBPage> {
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              //accountName: Text('Oflutter.com'),
               accountName: Text(getUserInfo().getUName().toString()),
               accountEmail: Text(getUserInfo().getUEmail().toString()),
               currentAccountPicture: CircleAvatar(

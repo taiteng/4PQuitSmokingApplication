@@ -167,7 +167,6 @@ class _AState extends State<APage> {
                         children: [
                           Text(document['title'], style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
                           Text(document['desc'], style: TextStyle(color: Colors.black54,),),
-                          //Text(document['condition'], style: TextStyle(color: Colors.black54,),),
                           SizedBox(
                             width: 100,
                             child: Row(

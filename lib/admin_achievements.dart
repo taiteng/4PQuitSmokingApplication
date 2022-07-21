@@ -5,27 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Achievements extends StatelessWidget {
-  const Achievements({Key? key}) : super(key: key);
+class AdminA extends StatelessWidget {
+  const AdminA({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
-      home: APage(),
+      home: AAPage(),
     );
   }
 }
 
-class APage extends StatefulWidget {
-  const APage({Key? key}) : super(key: key);
+class AAPage extends StatefulWidget {
+  const AAPage({Key? key}) : super(key: key);
 
   @override
-  _AState createState() => _AState();
+  _AAState createState() => _AAState();
 }
 
-class _AState extends State<APage> {
+class _AAState extends State<AAPage> {
   // text fields' controllers
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();

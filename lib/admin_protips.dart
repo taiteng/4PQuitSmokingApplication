@@ -3,27 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Protip extends StatelessWidget {
-  const Protip({Key? key}) : super(key: key);
+class AdminP extends StatelessWidget {
+  const AdminP({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
-      home: PTPage(),
+      home: APPage(),
     );
   }
 }
 
-class PTPage extends StatefulWidget {
-  const PTPage({Key? key}) : super(key: key);
+class APPage extends StatefulWidget {
+  const APPage({Key? key}) : super(key: key);
 
   @override
-  _PTState createState() => _PTState();
+  _APState createState() => _APState();
 }
 
-class _PTState extends State<PTPage> {
+class _APState extends State<APPage> {
   final CollectionReference _protips =
   FirebaseFirestore.instance.collection('protips');
 

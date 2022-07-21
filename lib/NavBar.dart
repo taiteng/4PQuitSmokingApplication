@@ -1,6 +1,6 @@
-import 'achievements.dart';
+import 'admin_achievements.dart';
 import 'leaderboard.dart';
-import 'protips.dart';
+import 'admin_protips.dart';
 import 'chat.dart';
 import 'settings.dart';
 import 'premium.dart';

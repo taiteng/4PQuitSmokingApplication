@@ -43,6 +43,7 @@ class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<s
 
     await surveyQuestion.set({"costPerPack": q1});
     await surveyQuestion.update({"username": uname });
+    await surveyQuestion.update({"time": "00:00:00:00"});
   }
 
   @override

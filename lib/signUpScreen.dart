@@ -402,7 +402,7 @@ class _signUpScreenState extends State<signUpScreen>{
                                 border: OutlineInputBorder(),
                               ),
                               validator: (value){
-                                if(value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value!)){
+                                if(value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)){
                                   return "Enter correct name";
                                 }else{
                                   return null;
@@ -449,7 +449,7 @@ class _signUpScreenState extends State<signUpScreen>{
                                 border: OutlineInputBorder(),
                               ),
                               validator: (value){
-                                if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value!)){
+                                if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value)){
                                   return "Enter correct email";
                                 }else{
                                   return null;

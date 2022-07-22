@@ -420,7 +420,7 @@ class _LoginScreenState extends State<loginScreen>{
                                 border: OutlineInputBorder(),
                               ),
                               validator: (value){
-                                if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value!)){
+                                if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value)){
                                   return "Enter correct email";
                                 }else{
                                   return null;

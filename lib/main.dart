@@ -1,9 +1,11 @@
 import 'dart:async';
-
+import 'userInfo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quit_smoking/userInfo.dart';
 import 'NavBar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -82,29 +84,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   );
 
-
-
-  Future  <void> quitSmokingDate(String days, String hours,String minutes , String seconds) async{
-
-    String time = days + ":" + hours + ":" + minutes + ":" + seconds;
-
-    final User? user = FirebaseAuth.instance.currentUser;
-    final String? uid = user?.uid.toString();
-    final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc('z9KAl1swgqbtdk1BOEMPIUVVRyz1');
-    await surveyQuestion.update({"time": time});
-  }
-
-
+  // Future  <void> quitSmokingDate(String days, String hours,String minutes , String seconds) async{
+  //
+  //   String time = days + ":" + hours + ":" + minutes + ":" + seconds;
+  //
+  //   final User? user = FirebaseAuth.instance.currentUser;
+  //   final String? uid = user?.uid.toString();
+  //   final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc(uid);
+  //   await surveyQuestion.update({"time": time});
+  // }
 
   Future  <String> getDays() async{
-    DocumentSnapshot snapshot = await(FirebaseFirestore.instance.collection('surveys').doc('z9KAl1swgqbtdk1BOEMPIUVVRyz1').get());
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String? uid = user?.uid.toString();
+    DocumentSnapshot snapshot = await(FirebaseFirestore.instance.collection('surveys').doc(uid).get());
     String day = snapshot['time'];
     return day.toString();
   }
-
-
-
-
 
   final CollectionReference _surveyss =
   FirebaseFirestore.instance.collection('surveys');
@@ -119,10 +115,26 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
 
     super.initState();
+
+    final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+    _messaging.getToken().then((token) {
+      storeToken(token);
+    });
+
     startTimer();
     reset();
     stopTimer();
     myBanner.load();
+  }
+
+
+  //Store the user's device token to the Firestore
+  Future<String?> storeToken(String? token) async{
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String? uname = user?.displayName.toString();
+
+    final _storeToken = FirebaseFirestore.instance.collection("deviceToken").doc(uname);
+    await _storeToken.set({"deviceToken": token});
   }
 
   void reset(){
@@ -155,7 +167,6 @@ class _MyHomePageState extends State<MyHomePage> {
     timer = Timer.periodic(Duration(seconds:1),(_)=>addTime());
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,199 +188,197 @@ class _MyHomePageState extends State<MyHomePage> {
                 final DocumentSnapshot documentSnapshot =
                 streamSnapshot.data!.docs[index];
 
-                var cpd = documentSnapshot['cigarattesPerDay'].toString();
-                var cpp = documentSnapshot['costPerPack'].toString();
-                var qpp = documentSnapshot['quantityPerPack'].toString();
+                if(getUserInfo().Survey(documentSnapshot.id.toString())){
+                  var cpd = documentSnapshot['cigarattesPerDay'].toString();
+                  var cpp = documentSnapshot['costPerPack'].toString();
+                  var qpp = documentSnapshot['quantityPerPack'].toString();
+
+                  var cigarattesPerDay = int.parse(cpd);
+                  var costPerPack = int.parse(cpp);
+                  var quantityPerPack = int.parse(qpp);
+
+                  var moneysaved = ((costPerPack/quantityPerPack)*cigarattesPerDay).toString() ;
+                  var lifewon = (cigarattesPerDay*11).toString();
 
 
-                var cigarattesPerDay = int.parse(cpd);
-                var costPerPack = int.parse(cpp);
-                var quantityPerPack = int.parse(qpp);
+                  String twoDigits(int n ) => n.toString().padLeft(2,'0');
+                  final days = twoDigits(duration.inDays);
+                  final hours = twoDigits(duration.inHours);
+                  final minutes = twoDigits(duration.inMinutes.remainder(60));
+                  final seconds = twoDigits(duration.inSeconds.remainder(60));
 
+                  int updated = 0;
 
-                var moneysaved = ((costPerPack/quantityPerPack)*cigarattesPerDay).toString() ;
-                var lifewon = (cigarattesPerDay*11).toString();
+                  if (updated==0) {
+                    //quitSmokingDate(days, hours, minutes, seconds);
+                  }
 
+                  return Card(
+                    child: Column(
+                        children: <Widget>[
+                          Container(
+                            color: Colors.cyan,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
 
-                String twoDigits(int n ) => n.toString().padLeft(2,'0');
-                final days = twoDigits(duration.inDays);
-                final hours = twoDigits(duration.inHours);
-                final minutes = twoDigits(duration.inMinutes.remainder(60));
-                final seconds = twoDigits(duration.inSeconds.remainder(60));
-
-                int updated = 0;
-
-                if (updated==0) {
-                  quitSmokingDate(days, hours, minutes, seconds);
-                }
-
-                return Card(
-                  child: Column(
-                      children: <Widget>[
-                        Container(
-                          color: Colors.cyan,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
-
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Text("RM"+ moneysaved , style: TextStyle(fontSize: 50)),
-                                    Text("Money Saved", style: TextStyle(fontSize: 20)),
-                                  ],
-                                ),
-                                Container(
-                                  height: 80,
-                                  child: VerticalDivider(
-                                    color: Colors.white,
-                                    thickness: 5,
-                                  ),
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    Text(lifewon + "min",style: TextStyle(fontSize: 50)),
-                                    Text("Life Won Back", style: TextStyle(fontSize: 20)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Container(
-                          color: Colors.yellow,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
-
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-
-                                Column(
-                                  children: <Widget>[
-                                    Text(documentSnapshot['quantityPerPack'].toString(), style: TextStyle(fontSize: 50)),
-                                    Text("Achivement unlocked", style: TextStyle(fontSize: 20)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-
-                        ),
-
-                        SizedBox(height: 5),
-
-                        Container(
-                          color: Colors.green,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
-
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Text('$days:$hours:$minutes:$seconds', style: TextStyle(fontSize: 50)),
-                                    Text("    Days  :    Hours :    Minutes :  Seconds", style: TextStyle(fontSize: 20)),
-                                    Text("Total Stop Smoking", style: TextStyle(fontSize: 20)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          color: Colors.green,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
-
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(elevation: 2),
-                                      onPressed: stopTimer,
-                                      child: Text('Reset', style: TextStyle(fontSize: 18)),
-                                    ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(elevation: 2),
-                                      onPressed: () async{
-                                        final weburl="Total Stop Smoking : $days days $hours hours $minutes Minutes $seconds Seconds";
-                                        Share.share('${weburl}');
-                                      },
-                                      child: Text('Share', style: TextStyle(fontSize: 18)),
-                                    ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Column(
+                                    children: <Widget>[
+                                      Text("RM"+ moneysaved , style: TextStyle(fontSize: 50)),
+                                      Text("Money Saved", style: TextStyle(fontSize: 20)),
                                     ],
-                                ),
-                              ],
+                                  ),
+                                  Container(
+                                    height: 80,
+                                    child: VerticalDivider(
+                                      color: Colors.white,
+                                      thickness: 5,
+                                    ),
+                                  ),
+                                  Column(
+                                    children: <Widget>[
+                                      Text(lifewon + "min",style: TextStyle(fontSize: 50)),
+                                      Text("Life Won Back", style: TextStyle(fontSize: 20)),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 15),
-                        ListTile(
+                          SizedBox(height: 5),
+                          Container(
+                            color: Colors.yellow,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+
+                                  Column(
+                                    children: <Widget>[
+                                      Text(documentSnapshot['quantityPerPack'].toString(), style: TextStyle(fontSize: 50)),
+                                      Text("Achivement unlocked", style: TextStyle(fontSize: 20)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                          ),
+
+                          SizedBox(height: 5),
+
+                          Container(
+                            color: Colors.green,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Column(
+                                    children: <Widget>[
+                                      Text('$days:$hours:$minutes:$seconds', style: TextStyle(fontSize: 50)),
+                                      Text("    Days  :    Hours :    Minutes :  Seconds", style: TextStyle(fontSize: 20)),
+                                      Text("Total Stop Smoking", style: TextStyle(fontSize: 20)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            color: Colors.green,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Column(
+                                    children: <Widget>[
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(elevation: 2),
+                                        onPressed: stopTimer,
+                                        child: Text('Reset', style: TextStyle(fontSize: 18)),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(elevation: 2),
+                                        onPressed: () async{
+                                          final weburl="Total Stop Smoking : $days days $hours hours $minutes Minutes $seconds Seconds";
+                                          Share.share('${weburl}');
+                                        },
+                                        child: Text('Share', style: TextStyle(fontSize: 18)),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          ListTile(
                             tileColor: Colors.orange,
                             title: Text('Pro Tips' ,style: TextStyle(fontSize: 30)),
                             trailing: const Icon(Icons.share),
                             subtitle: Text('Connect with a family member, friend or support group member for help in your effort to resist a tobacco craving. Chat on the phone, go for a walk, share a few laughs, or meet to talk and support each other. Counseling can be helpful too.'),
                             onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Protip())),
-                        ),
-                        Container(
-                          color: Colors.orange,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                          ),
+                          Container(
+                            color: Colors.orange,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
 
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(elevation: 2),
-                                      onPressed: () async{
-                                        final weburl="Connect with a family member, friend or support group member for help in your effort to resist a tobacco craving. Chat on the phone, go for a walk, share a few laughs, or meet to talk and support each other. Counseling can be helpful too.";
-                                        Share.share('${weburl}');
-                                      },
-                                      child: Text('Share', style: TextStyle(fontSize: 18)),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Column(
+                                    children: <Widget>[
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(elevation: 2),
+                                        onPressed: () async{
+                                          final weburl="Connect with a family member, friend or support group member for help in your effort to resist a tobacco craving. Chat on the phone, go for a walk, share a few laughs, or meet to talk and support each other. Counseling can be helpful too.";
+                                          Share.share('${weburl}');
+                                        },
+                                        child: Text('Share', style: TextStyle(fontSize: 18)),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
 
-                        SizedBox(height: 15),
-                        ListTile(
+                          SizedBox(height: 15),
+                          ListTile(
                             tileColor: Colors.purpleAccent,
                             title: Text('Community' ,style: TextStyle(fontSize: 20)),
                             leading: const Icon(Icons.person),
                             //onTap: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Chats()))
-                        ),
+                          ),
 
-                        SizedBox(height: 15),
+                          SizedBox(height: 15),
 
-                        // Container(
-                        //   alignment: Alignment.center,
-                        //   child: AdWidget(ad:myBanner),
-                        //    width: 800,
-                        //    height:50,
-                        // ),
+                          // Container(
+                          //   alignment: Alignment.center,
+                          //   child: AdWidget(ad:myBanner),
+                          //    width: 800,
+                          //    height:50,
+                          // ),
 
-                      ]),
-                );
-
-
-
+                        ]),
+                  );
+                }
+                else{
+                  return SizedBox.shrink();
+                }
               },
             );
-
-
           }
-
+          //after if stream
           return const Center(
             child: CircularProgressIndicator(),
           );

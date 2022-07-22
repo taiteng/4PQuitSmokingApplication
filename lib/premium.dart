@@ -57,9 +57,8 @@ class _ProState extends State<ProPage> {
           elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
-            onPressed: () =>
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (_) => MyHomePage(title: 'Tween'))),
+            //onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage(title: 'Tween'))),
+            onPressed: ()=>Navigator.pop(context),
           ),
         ),
         body: SingleChildScrollView(

@@ -1,62 +1,48 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'userInfo.dart';
+import 'admin_main.dart';
 import 'main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Achievements extends StatelessWidget {
-  const Achievements({Key? key}) : super(key: key);
+class AdminA extends StatelessWidget {
+  const AdminA({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
-      home: APage(),
+      home: AAPage(),
     );
   }
 }
 
-class APage extends StatefulWidget {
-  const APage({Key? key}) : super(key: key);
+class AAPage extends StatefulWidget {
+  const AAPage({Key? key}) : super(key: key);
 
   @override
-  _AState createState() => _AState();
+  _AAState createState() => _AAState();
 }
 
-class _AState extends State<APage> {
+class _AAState extends State<AAPage> {
   // text fields' controllers
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
   final TextEditingController _conditionController = TextEditingController();
 
-  bool isPro = false;
-  int utime = 20;
-
   final CollectionReference _achievements = FirebaseFirestore.instance.collection('achievements');
-  final User? user = FirebaseAuth.instance.currentUser;
-
-  Future<int> getTime() async {
-    //DocumentSnapshot snapshot = (await getUserInfo().displayTime()) as DocumentSnapshot<Object?>;
-    AsyncSnapshot snapshot = getUserInfo().displayTime() as AsyncSnapshot;
-
-    String temp = snapshot.data as String;
-    int time = int.parse(temp);
-
-    return time;
-  }
-
-  void _notValidated() {
-    const snackBar = SnackBar(
-      content: Text('You are not a PRO user.'),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
+    String action = 'create';
+    if (documentSnapshot != null) {
+      action = 'update';
+      _titleController.text = documentSnapshot['title'].toString();
+      _descController.text = documentSnapshot['desc'].toString();
+      _conditionController.text = documentSnapshot['condition'].toString();
+    }
+
     await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -92,14 +78,24 @@ class _AState extends State<APage> {
                   height: 20,
                 ),
                 ElevatedButton(
-                  child: Text('Create'),
+                  child: Text(action == 'create' ? 'Create' : 'Update'),
                   onPressed: () async {
                     final String? title = _titleController.text;
                     final String? desc = _descController.text;
                     final int? condition =
                     int.tryParse(_conditionController.text);
                     if (title != null && desc != null && condition != null) {
-                      await _achievements.add({"title": title, "desc": desc, "condition": condition});
+                      if (action == 'create') {
+                        // Persist a new product to Firestore
+                        await _achievements.add({"title": title, "desc": desc, "condition": condition});
+                      }
+
+                      if (action == 'update') {
+                        // Update the product
+                        await _achievements
+                            .doc(documentSnapshot!.id)
+                            .update({"title": title, "desc": desc, "condition": condition});
+                      }
 
                       // Clear the text fields
                       _titleController.text = '';
@@ -117,6 +113,15 @@ class _AState extends State<APage> {
         });
   }
 
+  // Deleteing a product by id
+  Future<void> _deleteProduct(String aId) async {
+    await _achievements.doc(aId).delete();
+
+    // Show a snackbar
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('You have successfully deleted an achievement')));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -130,7 +135,7 @@ class _AState extends State<APage> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
-            onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Tween'))),
+            onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>adminMain())),
           ),
           title: const Text('Achievements'),
           centerTitle: true,
@@ -146,29 +151,38 @@ class _AState extends State<APage> {
                 crossAxisCount: 3,
                 childAspectRatio: 1,
                 children: streamSnapshot.data!.docs.map((document) {
-                  return FutureBuilder(
-                      future: getUserInfo().displayTime(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        String data = snapshot.data;
-                        int time = int.parse(data);
-                        if(document['condition'] < time){
-                          return Card(
-                            elevation: 3.0,
-                            margin: const EdgeInsets.all(10),
-                            child: Column(
+                  if(document['condition'] > 0){
+                    return Card(
+                      elevation: 3.0,
+                      margin: const EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Text(document['title'], style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
+                          Text(document['desc'], style: TextStyle(color: Colors.black54,),),
+                          SizedBox(
+                            width: 100,
+                            child: Row(
                               children: [
-                                Text(document['title'], style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
-                                Text(document['desc'], style: TextStyle(color: Colors.black54,),),
-                                //Text(snapshot.data.toString(), style: TextStyle(color: Colors.black54,),),
+                                // Press this button to edit a single product
+                                IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    onPressed: () => _createOrUpdate(document),
+                                ),
+                                // This icon button is used to delete a single product
+                                IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () => _deleteProduct(document.id),
+                                ),
                               ],
                             ),
-                          );
-                        }
-                        else{
-                          return SizedBox.shrink();
-                        }
-                      },
+                          ),
+                        ],
+                      ),
                     );
+                  }
+                  else{
+                    return SizedBox.shrink();
+                  }
                 }).toList(),
               );
             }
@@ -180,7 +194,7 @@ class _AState extends State<APage> {
         ),
         // Add new product
         floatingActionButton: FloatingActionButton(
-          onPressed: () => isPro?_createOrUpdate():_notValidated(),
+          onPressed: () => _createOrUpdate(),
           child: const Icon(Icons.add),
         ),
       ),

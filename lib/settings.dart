@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:quit_smoking/edit_profile.dart';
+import 'package:quit_smoking/getHelp.dart';
 import 'package:quit_smoking/loginScreen.dart';
 import 'package:quit_smoking/surveyQ1.dart';
 import 'package:quit_smoking/userInfo.dart';
@@ -153,7 +154,7 @@ class Setting extends StatelessWidget {
                           elevation: 5,
                           onPressed: (){
 
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Edit()));
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>getHelp()));
 
                           },
                           padding: EdgeInsets.all(15),

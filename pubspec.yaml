@@ -91,6 +91,8 @@ flutter:
   - assets/images/crown-removebg-preview.png
   - assets/images/facebook.jpg
   - assets/images/ic_notification.png
+  - assets/images/klinik.jpg
+  - assets/images/The pearl.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

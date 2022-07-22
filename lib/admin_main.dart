@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'admin_achievements.dart';
+import 'admin_protips.dart';
 
 Future <void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,7 +84,7 @@ class adminMainState extends State<adminMain>{
                     children: <Widget>[
                       Container(
                         child: IconButton(onPressed: (){
-                          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => endSurvey()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminA()));
                         },
                           icon: Icon(Icons.add_task_outlined),
                           color: Colors.white,
@@ -194,7 +196,7 @@ class adminMainState extends State<adminMain>{
                     children: <Widget>[
                       Container(
                         child: IconButton(onPressed: (){
-                          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => endSurvey()));
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminP()));
                         },
                           icon: Icon(Icons.privacy_tip_outlined),
                           color: Colors.white,

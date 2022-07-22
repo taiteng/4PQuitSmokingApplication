@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'userInfo.dart';
+import 'admin_main.dart';
 import 'main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,23 +32,14 @@ class _AAState extends State<AAPage> {
   final TextEditingController _descController = TextEditingController();
   final TextEditingController _conditionController = TextEditingController();
 
-  bool isPro = false;
-
   final CollectionReference _achievements = FirebaseFirestore.instance.collection('achievements');
-
-  void _notValidated() {
-    const snackBar = SnackBar(
-      content: Text('You are not a PRO user.'),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
     String action = 'create';
     if (documentSnapshot != null) {
       action = 'update';
       _titleController.text = documentSnapshot['title'].toString();
-      _conditionController.text = documentSnapshot['desc'].toString();
+      _descController.text = documentSnapshot['desc'].toString();
       _conditionController.text = documentSnapshot['condition'].toString();
     }
 
@@ -143,7 +135,7 @@ class _AAState extends State<AAPage> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
-            onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Tween'))),
+            onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>adminMain())),
           ),
           title: const Text('Achievements'),
           centerTitle: true,
@@ -159,7 +151,7 @@ class _AAState extends State<AAPage> {
                 crossAxisCount: 3,
                 childAspectRatio: 1,
                 children: streamSnapshot.data!.docs.map((document) {
-                  if(document['condition'] > 20){
+                  if(document['condition'] > 0){
                     return Card(
                       elevation: 3.0,
                       margin: const EdgeInsets.all(10),
@@ -174,12 +166,12 @@ class _AAState extends State<AAPage> {
                                 // Press this button to edit a single product
                                 IconButton(
                                     icon: const Icon(Icons.edit),
-                                    onPressed: () => isPro?_createOrUpdate(document):_notValidated(),
+                                    onPressed: () => _createOrUpdate(document),
                                 ),
                                 // This icon button is used to delete a single product
                                 IconButton(
                                     icon: const Icon(Icons.delete),
-                                    onPressed: () => isPro?_deleteProduct(document.id):_notValidated(),
+                                    onPressed: () => _deleteProduct(document.id),
                                 ),
                               ],
                             ),
@@ -202,7 +194,7 @@ class _AAState extends State<AAPage> {
         ),
         // Add new product
         floatingActionButton: FloatingActionButton(
-          onPressed: () => isPro?_createOrUpdate():_notValidated(),
+          onPressed: () => _createOrUpdate(),
           child: const Icon(Icons.add),
         ),
       ),

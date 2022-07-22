@@ -1,3 +1,5 @@
+import 'package:quit_smoking/userInfo.dart';
+
 import 'main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +27,15 @@ class LPage extends StatefulWidget {
 
 class _LState extends State<LPage> {
   final CollectionReference _achievements =
-  FirebaseFirestore.instance.collection('achievements');
+  FirebaseFirestore.instance.collection('surveys');
+
+  int count = 0;
+
+  int plusCount(count){
+    count++;
+
+    return count;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +57,7 @@ class _LState extends State<LPage> {
         ),
         // Using StreamBuilder to display all products from Firestore in real-time
         body: StreamBuilder(
-          stream: _achievements.snapshots(),
+          stream: FirebaseFirestore.instance.collection('surveys').orderBy('time', descending: true).snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
             if (streamSnapshot.hasData) {
               return GridView.count(
@@ -62,9 +72,8 @@ class _LState extends State<LPage> {
                       margin: const EdgeInsets.all(10),
                       child: Column(
                         children: [
-                          Text(document['title'], style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
-                          Text(document['desc'], style: TextStyle(color: Colors.black54,),),
-                          Text(document['condition'], style: TextStyle(color: Colors.black54,),),
+                          Text(plusCount(count).toString(), style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
+                          Text(document['username'], style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
                         ],
                       ),
                     ),

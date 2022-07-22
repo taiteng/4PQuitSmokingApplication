@@ -32,10 +32,6 @@ class getUserInfo{
     return uname;
   }
 
-  String? getUsername(String userID){
-    return userID;
-  }
-
   String? getUImg(){
     final String? uimg = user?.photoURL.toString();
 
@@ -48,30 +44,36 @@ class getUserInfo{
     return uemail;
   }
 
-  bool getIsPro(){
-    //bool isPro = FirebaseFirestore.instance.collection('users').doc(user?.uid.toString()).collection('isPro').get() as bool;
-    //final bool? isPro = user?.isPro;
+  Future<bool> getIsPro() async {
+    final String? uid = user?.uid.toString();
+    var data;
+    var docRef = FirebaseFirestore.instance.collection("user").doc(uid);
+    await docRef.get().then((value) => data = value.get('isPro'));
 
-    // if(isPro == true){
-    //   return true;
-    // }
-    // else{
-    //   return false;
-    // }
-    return true;
+    String isPro = data.toString();
+
+    if(isPro == "true"){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
-  bool getIsAdmin(){
-    //bool isAdmin = FirebaseFirestore.instance.collection('users').doc(user?.uid.toString()).collection('isAdmin').get() as bool;
-    //final bool? isAdmin = user?.isAdmin;
+  Future<bool> getIsAdmin() async {
+    final String? uid = user?.uid.toString();
+    var data;
+    var docRef = FirebaseFirestore.instance.collection("user").doc(uid);
+    await docRef.get().then((value) => data = value.get('isAdmin'));
 
-    // if(isAdmin == true){
-    //   return true;
-    // }
-    // else{
-    //   return false;
-    // }
-    return true;
+    String isAdmin = data.toString();
+
+    if(isAdmin == "true"){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
   Future<String> displayTime() async {

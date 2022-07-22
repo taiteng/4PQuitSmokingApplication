@@ -496,7 +496,7 @@ class _LoginScreenState extends State<loginScreen>{
                               builder: (BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot){
                                 if(snapshot.connectionState==ConnectionState.done){
                                   Map<String, dynamic> data=snapshot.data!.data() as Map<String,dynamic>;
-                                  isAdmin=data['isAdmin'].toString();
+                                  isAdmin = data['isAdmin'].toString();
 
                             }
 

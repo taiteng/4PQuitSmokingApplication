@@ -517,8 +517,12 @@ class _signUpScreenState extends State<signUpScreen>{
                             if(!formkey.currentState!.validate()){
                               return;
                             }
-                            FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+                            UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+                            User? user = result.user;
+                            user?.updateProfile(displayName: "Beta Tester");
+
                             FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+
 
                             await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid).set({
 

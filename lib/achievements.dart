@@ -33,21 +33,9 @@ class _AState extends State<APage> {
   final TextEditingController _descController = TextEditingController();
   final TextEditingController _conditionController = TextEditingController();
 
-  bool isPro = false;
-  int utime = 20;
-
   final CollectionReference _achievements = FirebaseFirestore.instance.collection('achievements');
+  final CollectionReference _user = FirebaseFirestore.instance.collection('user');
   final User? user = FirebaseAuth.instance.currentUser;
-
-  Future<int> getTime() async {
-    //DocumentSnapshot snapshot = (await getUserInfo().displayTime()) as DocumentSnapshot<Object?>;
-    AsyncSnapshot snapshot = getUserInfo().displayTime() as AsyncSnapshot;
-
-    String temp = snapshot.data as String;
-    int time = int.parse(temp);
-
-    return time;
-  }
 
   void _notValidated() {
     const snackBar = SnackBar(
@@ -56,7 +44,7 @@ class _AState extends State<APage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
+  Future<void> _create([DocumentSnapshot? documentSnapshot]) async {
     await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -180,9 +168,24 @@ class _AState extends State<APage> {
           },
         ),
         // Add new product
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => isPro?_createOrUpdate():_notValidated(),
-          child: const Icon(Icons.add),
+        floatingActionButton: FutureBuilder(
+          future: getUserInfo().getIsPro(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            bool data = snapshot.data;
+            bool isPro = true;
+            if(data){
+              return FloatingActionButton(
+                onPressed: () => _create(),
+                child: const Icon(Icons.add),
+              );
+            }
+            else{
+              return FloatingActionButton(
+                onPressed: () => _notValidated(),
+                child: const Icon(Icons.add),
+              );
+            }
+          }
         ),
       ),
     );

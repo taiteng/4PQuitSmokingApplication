@@ -26,10 +26,6 @@ class ProPage extends StatefulWidget {
 }
 
 class _ProState extends State<ProPage> {
-  //CollectionReference
-  final _users = FirebaseFirestore.instance.collection('user');
-
-  // Deleteing a product by id
   Future<void> ToPro() async {
     FirebaseFirestore.instance.collection('user').doc(getUserInfo().getUID().toString()).update({'isPro': true});
 

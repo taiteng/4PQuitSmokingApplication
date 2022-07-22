@@ -15,6 +15,17 @@ class getUserInfo{
     return uid;
   }
 
+  bool Survey(String surveyID){
+    final String? uid = user?.uid.toString();
+
+    if(surveyID == uid){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
   String? getUName(){
     final String? uname = user?.displayName.toString();
 

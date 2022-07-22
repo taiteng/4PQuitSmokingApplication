@@ -362,6 +362,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                           SizedBox(height: 15),
 
+                          //Google Ads
                           // Container(
                           //   alignment: Alignment.center,
                           //   child: AdWidget(ad:myBanner),

@@ -74,6 +74,7 @@ class _LState extends State<LPage> {
                         children: [
                           Text(plusCount(count).toString(), style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
                           Text(document['username'], style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
+                          Text(document['time'], style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
                         ],
                       ),
                     ),

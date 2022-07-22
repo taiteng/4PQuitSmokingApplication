@@ -66,7 +66,7 @@ class getUserInfo{
   Future<String> displayTime() async {
     final String? uid = user?.uid.toString();
     var data;
-    var docRef = FirebaseFirestore.instance.collection("surveys").doc("z9KAl1swgqbtdk1BOEMPIUVVRyz1");
+    var docRef = FirebaseFirestore.instance.collection("surveys").doc(uid);
     await docRef.get().then((value) => data = value.get('time'));
 
     int time = 0;

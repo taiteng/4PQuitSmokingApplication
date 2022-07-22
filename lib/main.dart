@@ -216,7 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: <Widget>[
                                 Column(
                                   children: <Widget>[
-                                    Text("RM"+ moneysaved , style: TextStyle(fontSize: 60)),
+                                    Text("RM"+ moneysaved , style: TextStyle(fontSize: 50)),
                                     Text("Money Saved", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
@@ -229,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                                 Column(
                                   children: <Widget>[
-                                    Text(lifewon + "min",style: TextStyle(fontSize: 60)),
+                                    Text(lifewon + "min",style: TextStyle(fontSize: 50)),
                                     Text("Life Won Back", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
@@ -249,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                 Column(
                                   children: <Widget>[
-                                    Text(documentSnapshot['quantityPerPack'].toString(), style: TextStyle(fontSize: 60)),
+                                    Text(documentSnapshot['quantityPerPack'].toString(), style: TextStyle(fontSize: 50)),
                                     Text("Achivement unlocked", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),
@@ -271,8 +271,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: <Widget>[
                                 Column(
                                   children: <Widget>[
-                                    Text('$days:$hours:$minutes:$seconds', style: TextStyle(fontSize: 60)),
-                                    Text("    Days  :    Hours :    Minutes :  Seconds", style: TextStyle(fontSize: 22)),
+                                    Text('$days:$hours:$minutes:$seconds', style: TextStyle(fontSize: 50)),
+                                    Text("    Days  :    Hours :    Minutes :  Seconds", style: TextStyle(fontSize: 20)),
                                     Text("Total Stop Smoking", style: TextStyle(fontSize: 20)),
                                   ],
                                 ),

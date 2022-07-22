@@ -49,7 +49,8 @@ class _ChatState extends State<ChatPage> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
-            onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Tween'))),
+            //onPressed: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Tween'))),
+            onPressed: ()=>Navigator.pop(context),
           ),
           title: const Text('Community'),
           centerTitle: true,

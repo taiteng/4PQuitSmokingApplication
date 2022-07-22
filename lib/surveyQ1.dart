@@ -37,10 +37,12 @@ class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<s
     await Firebase.initializeApp();
     final User? user = FirebaseAuth.instance.currentUser;
     final String? uid = user?.uid.toString();
+    final String? uname = user?.displayName.toString();
 
     final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc(uid);
 
     await surveyQuestion.set({"costPerPack": q1});
+    await surveyQuestion.update({"username": uname });
   }
 
   @override

@@ -31,7 +31,7 @@ class _ProState extends State<ProPage> {
 
   // Deleteing a product by id
   Future<void> ToPro() async {
-    FirebaseFirestore.instance.collection('users').doc(getUserInfo().getUID().toString()).update({'isPro': true});
+    FirebaseFirestore.instance.collection('user').doc(getUserInfo().getUID().toString()).update({'isPro': true});
 
     // Show a snackbar
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

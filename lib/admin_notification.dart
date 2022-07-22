@@ -93,7 +93,6 @@ class adminMainState extends State<adminMain>{
 
 
   void listenFCM() async{
-    final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
     final AndroidInitializationSettings initializationSettingsAndroid =
     AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -116,6 +115,14 @@ class adminMainState extends State<adminMain>{
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
+
+      if (message.notification != null) {
+        final snackBar = SnackBar(
+          content: Text(message.notification?.title ?? '', maxLines: 2),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+
       if (notification != null && android != null && !kIsWeb) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
@@ -200,7 +207,7 @@ class adminMainState extends State<adminMain>{
     // print("Notification Created");
 
     DocumentSnapshot snapshot =
-        (await FirebaseFirestore.instance.collection("deviceToken").doc(username).get()) as DocumentSnapshot<Object?>;
+        (await FirebaseFirestore.instance.collection("deviceToken").doc("null").get()) as DocumentSnapshot<Object?>;
 
     String token = snapshot['deviceToken'];
 

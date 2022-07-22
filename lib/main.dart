@@ -87,15 +87,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   );
 
-  // Future  <void> quitSmokingDate(String days, String hours,String minutes , String seconds) async{
-  //
-  //   String time = days + ":" + hours + ":" + minutes + ":" + seconds;
-  //
-  //   final User? user = FirebaseAuth.instance.currentUser;
-  //   final String? uid = user?.uid.toString();
-  //   final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc(uid);
-  //   await surveyQuestion.update({"time": time});
-  // }
+  void quitSmokingDate(String days, String hours,String minutes , String seconds) async{
+      String time = days + ":" + hours + ":" + minutes + ":" + seconds;
+
+      final User? user = FirebaseAuth.instance.currentUser;
+      final String? uid = user?.uid.toString();
+      final surveyQuestion = FirebaseFirestore.instance.collection('surveys').doc(uid);
+      await surveyQuestion.update({"time": time});
+  }
 
   Future  <String> getDays() async{
     final User? user = FirebaseAuth.instance.currentUser;
@@ -114,6 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Duration duration = Duration();
   Timer? timer ;
   bool isCountdown = false;
+  bool update = false;
 
   @override
   void initState() {
@@ -169,9 +169,6 @@ class _MyHomePageState extends State<MyHomePage> {
     final User? user = FirebaseAuth.instance.currentUser;
     final String? uid = user?.uid.toString();
 
-    //QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('surveys').get();
-    //final data = querySnapshot.docs.map((doc) => doc.get('time')).toList();
-
     DocumentSnapshot<Map<String, dynamic>> map = await FirebaseFirestore.instance.collection('surveys').doc(uid).get();
     final data = map.get("time");
 
@@ -180,21 +177,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if(timeParts[0] != "00"){
       temp = int.parse(timeParts[0]);
-      days = temp * 1440;
+      days = temp * 86400;
       time += days;
     }
     else if(timeParts[1] != "00"){
       temp = int.parse(timeParts[1]);
-      hours = temp * 60;
+      hours = temp * 3600;
       time += hours;
     }
     else if(timeParts[2] != "00"){
-      mins = int.parse(timeParts[2]);
+      temp = int.parse(timeParts[2]);
+      mins = temp * 60;
       time += mins;
     }
     else if(timeParts[3] != "00"){
-      temp = int.parse(timeParts[3]);
-      secs = (temp/60) as int;
+      secs = int.parse(timeParts[3]);
       time += secs;
     }
     else{
@@ -202,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     setState(() {
-      seconds = duration.inSeconds + (time * 60);
+      seconds = duration.inSeconds + time;
 
       duration = Duration(seconds: seconds);
     });
@@ -263,10 +260,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   final minutes = twoDigits(duration.inMinutes.remainder(60));
                   final seconds = twoDigits(duration.inSeconds.remainder(60));
 
-                  int updated = 0;
+                  int mins = duration.inMinutes%5;
 
-                  if (updated==0) {
-                    //quitSmokingDate(days, hours, minutes, seconds);
+                  if (mins == 0) {
+                    update = true;
+                  }
+                  else{
+                    update = false;
+                  }
+
+                  if(update){
+                    quitSmokingDate(days, hours, minutes, seconds);
                   }
 
                   return Card(

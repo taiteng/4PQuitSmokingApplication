@@ -43,15 +43,15 @@ dependencies:
   flutter_facebook_auth: ^4.3.4+2
   google_sign_in: ^5.4.0
   flutter_gherkin: ^2.0.0
-  #paypal
   http_auth: ^1.0.1
   webview_flutter: ^3.0.4
   shared_preferences: ^2.0.15
   google_mobile_ads: ^1.3.0
   share_plus: ^4.0.10
-
-
-
+  firebase_messaging:
+  http: ^0.13.4
+  flutter_local_notifications: 9.7.0
+  js: ^0.6.2
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +90,7 @@ flutter:
   - assets/images/nft1.jpg
   - assets/images/crown-removebg-preview.png
   - assets/images/facebook.jpg
+  - assets/images/ic_notification.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -520,7 +520,7 @@ class _signUpScreenState extends State<signUpScreen>{
                             FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
                             FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
 
-                            await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).set({
+                            await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid).set({
 
                               'email':emailController.text,
                               'isAdmin':'false',

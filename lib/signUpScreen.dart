@@ -304,7 +304,7 @@ class _signUpScreenState extends State<signUpScreen>{
       final facebookAuthCredential= FacebookAuthProvider.credential(facebookLoginResult.accessToken!.token);
       await Firebase.initializeApp();
       await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-      await FirebaseFirestore.instance.collection('users').add({
+      await FirebaseFirestore.instance.collection('user').add({
         'email':userData['email'],
         'imageUrl': userData['picture']['data']['url'],
         'name': userData['name'],
@@ -513,12 +513,22 @@ class _signUpScreenState extends State<signUpScreen>{
                         width: double.infinity,
                         child: RaisedButton(
                           elevation: 5,
-                          onPressed: () {
+                          onPressed: () async {
                             if(!formkey.currentState!.validate()){
                               return;
                             }
                             FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
                             FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+
+                            await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).set({
+
+                              'email':emailController.text,
+                              'isAdmin':'false',
+                              'isPro':'false',
+                              'password':passwordController.text,
+                              'username':usernameController.text
+
+                            });
 
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(builder: (_) => surveyQ1()));

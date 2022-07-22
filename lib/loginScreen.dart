@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:quit_smoking/admin_main.dart';
 import 'package:quit_smoking/main.dart';
 import 'package:quit_smoking/signUpScreen.dart';
 
@@ -20,6 +21,10 @@ class loginScreen extends StatefulWidget{
 
 
 class _LoginScreenState extends State<loginScreen>{
+  final GlobalKey<FormState> formkey=GlobalKey<FormState>();
+  var isAdmin;
+  final emailController=TextEditingController();
+  final passwordController=TextEditingController();
   GoogleSignIn _googleSignIn=GoogleSignIn(scopes: ['email']);
   bool isRememberMe=false;
   bool loading=false;
@@ -343,8 +348,9 @@ class _LoginScreenState extends State<loginScreen>{
   Widget build(BuildContext context){
     return Scaffold(
 
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
+      body: Form(
+          key: formkey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
         child: GestureDetector(
           child: Stack(
             children: <Widget>[
@@ -379,13 +385,148 @@ class _LoginScreenState extends State<loginScreen>{
                             fontWeight: FontWeight.bold
                         ),),
                       SizedBox(height: 50),
-                      buildEmail(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Email',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold
+                            ),
+
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow:[
+                                  BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 6,
+                                      offset: Offset(0,2)
+                                  )
+                                ]
+                            ),
+                            height: 60,
+                            child: TextFormField(
+                              controller: emailController,
+                              decoration: const InputDecoration(
+                                prefixIcon: Icon(Icons.mail),
+                                labelText: 'Email',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value){
+                                if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value!)){
+                                  return "Enter correct email";
+                                }else{
+                                  return null;
+                                }
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                       SizedBox(height: 20),
-                      buildPassword(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Password',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold
+                            ),
+
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow:[
+                                  BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 6,
+                                      offset: Offset(0,2)
+                                  )
+                                ]
+                            ),
+                            height: 60,
+                            child: TextFormField(
+                              controller: passwordController,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                prefixIcon: Icon(Icons.password),
+                                labelText: 'Password',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value){
+                                if(value != null && value.length<8){
+                                  return 'Enter min. 8 characters';
+                                }else{
+                                  return null;
+                                }
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                       SizedBox(height: 20),
                       buildRemember(),
                       buildForgotPass(),
-                      buildLoginBtn(),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 25),
+                        width: double.infinity,
+                        child: RaisedButton(
+                          elevation: 5,
+                          onPressed: () {
+                            if(!formkey.currentState!.validate()){
+                              return;
+                            }
+                            FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+                            CollectionReference user=FirebaseFirestore.instance.collection('user');
+                            FutureBuilder<DocumentSnapshot>(
+                              future: user.doc(FirebaseAuth.instance.currentUser?.uid).get(),
+                              builder: (BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot){
+                                if(snapshot.connectionState==ConnectionState.done){
+                                  Map<String, dynamic> data=snapshot.data!.data() as Map<String,dynamic>;
+                                  isAdmin=data['isAdmin'].toString();
+
+                            }
+
+                                return Text("Loading");
+                            },
+                            );
+                            if(isAdmin=='false'){
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(builder: (_) => MyHomePage(title: 'Login',)));
+                            }else if(isAdmin=='false'){
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(builder: (_) => adminMain()));
+
+                            }
+                          },
+                          padding: EdgeInsets.all(15),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)
+                          ),
+                          color: Colors.white,
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                                color: Color(0xff5ac18e),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                      ),
                       buildSignUp(),
                       buildFacebook(),
                       buildGoogle(),

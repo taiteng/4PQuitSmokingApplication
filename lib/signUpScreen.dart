@@ -519,7 +519,7 @@ class _signUpScreenState extends State<signUpScreen>{
                             }
                             UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
                             User? user = result.user;
-                            user?.updateProfile(displayName: "Beta Tester");
+                            user?.updateProfile(displayName: "Beta Tester", photoURL: "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png");
 
                             FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
 

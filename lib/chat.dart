@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'main.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'userInfo.dart';
+
+Future main() async{
+  runApp(const Chats());
+}
 
 class Chats extends StatelessWidget {
   const Chats({Key? key}) : super(key: key);
@@ -26,24 +29,78 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatState extends State<ChatPage> {
+
+  FToast fToast = FToast();
+
+  _messageSent() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellowAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Message sent"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _emptyString() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellowAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.announcement),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Please input message"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   final _SendMessage = TextEditingController();
 
   final CollectionReference _chat =
   FirebaseFirestore.instance.collection('chat');
 
   Future<void> sendMessage(String msg) async{
+    _messageSent();
+
     DateTime now = DateTime.now();
     await _chat.add({"message": msg, "uid": getUserInfo().getUID().toString(), "uname": getUserInfo().getUName().toString(), "time": now});
-
-    const snackBar = SnackBar(
-      content: Text('Message sent'),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
   Widget build(BuildContext context) {
+    fToast.init(context);
     return MaterialApp(
       // Remove the debug banner
       debugShowCheckedModeBanner: false,
@@ -176,10 +233,7 @@ class _ChatState extends State<ChatPage> {
                         final String msg = _SendMessage.text;
 
                         if(msg == ""){
-                          const snackBar = SnackBar(
-                            content: Text('Please input smtg...'),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          _emptyString();
                         }else{
                           _SendMessage.clear();
                           sendMessage(msg);

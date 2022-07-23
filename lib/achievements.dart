@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'userInfo.dart';
 import 'main.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +28,117 @@ class APage extends StatefulWidget {
 }
 
 class _AState extends State<APage> {
+
+  FToast fToast = FToast();
+
+  _button() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Add button pressed"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _notPRO() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("You are not a PRO user"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _created() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Achievement created"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _empty() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Please make sure you fill in the field"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   // text fields' controllers
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
@@ -36,13 +147,6 @@ class _AState extends State<APage> {
   final CollectionReference _achievements = FirebaseFirestore.instance.collection('achievements');
   final CollectionReference _user = FirebaseFirestore.instance.collection('user');
   final User? user = FirebaseAuth.instance.currentUser;
-
-  void _notValidated() {
-    const snackBar = SnackBar(
-      content: Text('You are not a PRO user.'),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   Future<void> _create([DocumentSnapshot? documentSnapshot]) async {
     await showModalBottomSheet(
@@ -92,9 +196,7 @@ class _AState extends State<APage> {
                     if (title != null && desc != null && condition != null) {
                       await _achievements.add({"title": title, "desc": desc, "condition": condition});
 
-                      // Show a snackbar
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Achievement added')));
+                      _created();
 
                       // Clear the text fields
                       _titleController.text = '';
@@ -105,11 +207,7 @@ class _AState extends State<APage> {
                       FocusManager.instance.primaryFocus?.unfocus();
                     }
                     else{
-                      const snackBar = SnackBar(
-                        content: Text('Please make sure you fill in the field'),
-                      );
-
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      _empty();
                     }
                   },
                 )
@@ -121,6 +219,7 @@ class _AState extends State<APage> {
 
   @override
   Widget build(BuildContext context) {
+    fToast.init(context);
     return MaterialApp(
       // Remove the debug banner
       debugShowCheckedModeBanner: false,
@@ -186,13 +285,10 @@ class _AState extends State<APage> {
           future: getUserInfo().getIsPro(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             bool data = snapshot.data;
-            bool isPro = true;
             if(data){
               return FloatingActionButton(
                 onPressed: () async{
-                  // Show a snackbar
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Button add achievement pressed')));
+                  _button();
 
                   _create();
                 },
@@ -203,11 +299,7 @@ class _AState extends State<APage> {
             else{
               return FloatingActionButton(
                 onPressed: () async{
-                  // Show a snackbar
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Button add achievement pressed')));
-
-                  _notValidated();
+                  _notPRO();
                 },
                 child: const Icon(Icons.add),
                 key: const ValueKey("add_btn"),

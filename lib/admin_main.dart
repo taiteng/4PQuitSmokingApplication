@@ -38,8 +38,14 @@ class adminMainState extends State<adminMain>{
     return Scaffold(
       appBar: AppBar(
         title: Text("Tween - Admin Panel"),
+        centerTitle: true,
         backgroundColor: Colors.red[600],
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
+          //onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MyHomePage(title: 'Tween'))),
+          onPressed: ()=>Navigator.pop(context),
+        ),
       ),
       body: Center(
 

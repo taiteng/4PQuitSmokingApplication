@@ -20,7 +20,9 @@ class loginScreen extends StatefulWidget{
 }
 
 
+
 class _LoginScreenState extends State<loginScreen>{
+
   final GlobalKey<FormState> formkey=GlobalKey<FormState>();
   var isAdmin;
   final emailController=TextEditingController();
@@ -344,6 +346,7 @@ class _LoginScreenState extends State<loginScreen>{
       setState((){loading = false;});
     }
   }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -490,27 +493,10 @@ class _LoginScreenState extends State<loginScreen>{
                               return;
                             }
                             FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                            CollectionReference user=FirebaseFirestore.instance.collection('user');
-                            FutureBuilder<DocumentSnapshot>(
-                              future: user.doc(FirebaseAuth.instance.currentUser?.uid).get(),
-                              builder: (BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot){
-                                if(snapshot.connectionState==ConnectionState.done){
-                                  Map<String, dynamic> data=snapshot.data!.data() as Map<String,dynamic>;
-                                  isAdmin=data['isAdmin'].toString();
 
-                            }
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (_) => MyHomePage(title: 'Login',)));
 
-                                return Text("Loading");
-                            },
-                            );
-                            if(isAdmin=='false'){
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(builder: (_) => MyHomePage(title: 'Login',)));
-                            }else if(isAdmin=='false'){
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(builder: (_) => adminMain()));
-
-                            }
                           },
                           padding: EdgeInsets.all(15),
                           shape: RoundedRectangleBorder(

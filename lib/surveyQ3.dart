@@ -19,21 +19,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: surveyQ3(),
+      home: const SurveyQ3(),
     );
   }
 }
 
-class surveyQ3 extends StatefulWidget {
+class SurveyQ3 extends StatefulWidget {
+  const SurveyQ3({Key? key}) : super(key: key);
+
 
   @override
-  State<surveyQ3> createState() => surveyQ3State();
+  State<SurveyQ3> createState() => SurveyQ3State();
 }
 
-class surveyQ3State extends State<surveyQ3> {
+class SurveyQ3State extends State<SurveyQ3> {
   int _currentValue = 3;
 
   Future  <void> cigarattesPerDay(String q3) async{
@@ -49,7 +52,7 @@ class surveyQ3State extends State<surveyQ3> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Question 3"),
+        title: const Text("Question 3"),
         backgroundColor: Colors.red[600],
         automaticallyImplyLeading: false,
       ),
@@ -59,8 +62,8 @@ class surveyQ3State extends State<surveyQ3> {
 
           Container(
             height: 250,
-            width: 400,
-            decoration: BoxDecoration(
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/surveyQ3.jpg"),
                 fit: BoxFit.fill,
@@ -69,36 +72,34 @@ class surveyQ3State extends State<surveyQ3> {
             ),
           ),
 
-          SizedBox(height: 50),
-
-
+          const SizedBox(height: 50),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconButton(onPressed: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => surveyQ2()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SurveyQ2()));
               },
-                icon: Icon(Icons.arrow_back_ios_rounded),
+                icon: const Icon(Icons.arrow_back_ios_rounded),
               ),
               IconButton(onPressed: (){
                 cigarattesPerDay(_currentValue.toString());
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => surveyQ4()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SurveyQ4()));
 
                 },
-                icon: Icon(Icons.arrow_forward_ios_rounded),
+                icon: const Icon(Icons.arrow_forward_ios_rounded),
                 alignment: Alignment.centerRight,
               ),
             ],
           ),
 
-          Divider(),
-          Text("How many cigarrates do you smoke per day?",
+          const Divider(),
+          const Text("How many cigarettes do you smoke per day?",
             style: TextStyle(
               fontSize: 18.0,
             ),
           ),
-          SizedBox(height:20.0),
+          const SizedBox(height:20.0),
           SizedBox(width: 250.0,
             child: NumberPicker(
               value: _currentValue,

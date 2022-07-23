@@ -17,20 +17,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: surveyQ1(),
+      home: const SurveyQ1(),
     );
   }
 }
 
-class surveyQ1 extends StatefulWidget {
+class SurveyQ1 extends StatefulWidget {
+  const SurveyQ1({Key? key}) : super(key: key);
+
   @override
-  State<surveyQ1> createState() => surveyQ1State();
+  State<SurveyQ1> createState() => SurveyQ1State();
 }
 
-class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<surveyQ1>{
+class SurveyQ1State extends State<SurveyQ1> with AutomaticKeepAliveClientMixin<SurveyQ1>{
   final q1controller = TextEditingController();
 
   Future<void> costPerPack(String q1) async{
@@ -51,7 +54,7 @@ class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<s
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Question 1"),
+        title: const Text("Question 1"),
         backgroundColor: Colors.red[600],
         automaticallyImplyLeading: false,
 
@@ -61,8 +64,8 @@ class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<s
           children: <Widget>[
             Container(
               height: 250,
-              width: 400,
-              decoration: BoxDecoration(
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/surveyQ1.jpg"),
                   fit: BoxFit.fill,
@@ -71,8 +74,7 @@ class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<s
               ),
             ),
 
-            SizedBox(height: 50,),
-
+            const SizedBox(height: 50,),
 
             Row(
               children: <Widget>[
@@ -90,25 +92,24 @@ class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<s
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }else{
                     costPerPack(q1);
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => surveyQ2()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SurveyQ2()));
                   }
 
                 },
-                  icon: Icon(Icons.arrow_forward_ios_rounded),
+                  icon: const Icon(Icons.arrow_forward_ios_rounded),
                   alignment: Alignment.centerRight,
                 ),
               ],
             ),
 
-            SizedBox(height: 20),
-
+            const SizedBox(height: 20),
 
             Align(
               alignment: Alignment.center,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
 
-                child: Text("Cost of the cigarrates per pack?",
+                child: const Text("Cost of the cigarrates per pack?",
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -116,7 +117,7 @@ class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<s
               ),
             ),
 
-            SizedBox(height:20.0),
+            const SizedBox(height:20.0),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -129,9 +130,9 @@ class surveyQ1State extends State<surveyQ1> with AutomaticKeepAliveClientMixin<s
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: TextField(
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     controller: q1controller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: "e.g.  20"
                     ),

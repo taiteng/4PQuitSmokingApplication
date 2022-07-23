@@ -244,7 +244,7 @@ class _signUpScreenState extends State<signUpScreen>{
 
 
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => surveyQ1()));
+              MaterialPageRoute(builder: (_) => SurveyQ1()));
         },
         padding: EdgeInsets.all(15),
         shape: RoundedRectangleBorder(

@@ -19,21 +19,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: surveyQ4(),
+      home: const SurveyQ4(),
     );
   }
 }
 
-class surveyQ4 extends StatefulWidget {
+class SurveyQ4 extends StatefulWidget {
+  const SurveyQ4({Key? key}) : super(key: key);
+
 
   @override
-  State<surveyQ4> createState() => surveyQ4State();
+  State<SurveyQ4> createState() => SurveyQ4State();
 }
 
-class surveyQ4State extends State<surveyQ4> {
+class SurveyQ4State extends State<SurveyQ4> {
   DateTime selectedDate = DateTime.now();
 
   Future  <void> quitSmokingDate(String q4) async{
@@ -48,7 +51,7 @@ class surveyQ4State extends State<surveyQ4> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Question 4"),
+        title: const Text("Question 4"),
         backgroundColor: Colors.red[600],
         automaticallyImplyLeading: false,
       ),
@@ -58,8 +61,8 @@ class surveyQ4State extends State<surveyQ4> {
 
           Container(
             height: 250,
-            width: 400,
-            decoration: BoxDecoration(
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/surveyQ4.jpg"),
                 fit: BoxFit.fill,
@@ -68,15 +71,15 @@ class surveyQ4State extends State<surveyQ4> {
             ),
           ),
 
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconButton(onPressed: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => surveyQ3()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SurveyQ3()));
               },
-                icon: Icon(Icons.arrow_back_ios_rounded),
+                icon: const Icon(Icons.arrow_back_ios_rounded),
               ),
               IconButton(onPressed: (){
                 String trimDate = selectedDate.toString().substring(0, 10);
@@ -84,21 +87,21 @@ class surveyQ4State extends State<surveyQ4> {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => endSurvey()));
 
                 },
-                icon: Icon(Icons.arrow_forward_ios_rounded),
+                icon: const Icon(Icons.arrow_forward_ios_rounded),
                 alignment: Alignment.centerRight,
               ),
             ],
           ),
 
-          Divider(),
-          Text("When do you plan to quit smoking?",
+          const Divider(),
+          const Text("When do you plan to quit smoking?",
             style: TextStyle(
               fontSize: 18.0,
             ),
           ),
-          SizedBox(height:20.0),
+          const SizedBox(height:20.0),
           SizedBox(width: 250.0,
-            child: Container(
+            child: SizedBox(
               height: 200,
               child: CupertinoDatePicker(
                 mode: CupertinoDatePickerMode.date,

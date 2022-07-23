@@ -20,21 +20,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: surveyQ2(),
+      home: const SurveyQ2(),
     );
   }
 }
 
-class surveyQ2 extends StatefulWidget {
+class SurveyQ2 extends StatefulWidget {
+  const SurveyQ2({Key? key}) : super(key: key);
+
 
   @override
-  State<surveyQ2> createState() => surveyQ2State();
+  State<SurveyQ2> createState() => SurveyQ2State();
 }
 
-class surveyQ2State extends State<surveyQ2> with AutomaticKeepAliveClientMixin<surveyQ2>{
+class SurveyQ2State extends State<SurveyQ2>{
   int _currentValue = 10;
 
   Future <void> quantityPerPack(String q2) async{
@@ -51,7 +54,7 @@ class surveyQ2State extends State<surveyQ2> with AutomaticKeepAliveClientMixin<s
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Question 2"),
+        title: const Text("Question 2"),
         backgroundColor: Colors.red[600],
         automaticallyImplyLeading: false,
       ),
@@ -60,8 +63,8 @@ class surveyQ2State extends State<surveyQ2> with AutomaticKeepAliveClientMixin<s
         children: <Widget>[
           Container(
             height: 250,
-            width: 400,
-            decoration: BoxDecoration(
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/surveyQ2.jpg"),
                 fit: BoxFit.fill,
@@ -70,32 +73,32 @@ class surveyQ2State extends State<surveyQ2> with AutomaticKeepAliveClientMixin<s
             ),
           ),
 
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconButton(onPressed: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => surveyQ1()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SurveyQ1()));
 
 
 
               },
-                icon: Icon(Icons.arrow_back_ios_rounded),
+                icon: const Icon(Icons.arrow_back_ios_rounded),
               ),
               IconButton(onPressed: (){
                 quantityPerPack(_currentValue.toString());
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => surveyQ3()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SurveyQ3()));
 
               },
-                icon: Icon(Icons.arrow_forward_ios_rounded),
+                icon: const Icon(Icons.arrow_forward_ios_rounded),
                 alignment: Alignment.centerRight,
               ),
             ],
           ),
 
 
-          Text("Quantity of the cigarattes per pack?",
+          const Text("Quantity of the cigarettes per pack?",
             style: TextStyle(
               fontSize: 18.0,
             ),
@@ -115,6 +118,4 @@ class surveyQ2State extends State<surveyQ2> with AutomaticKeepAliveClientMixin<s
     ),
     );
   }
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'userInfo.dart';
 import 'admin_main.dart';
 import 'main.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,6 +28,186 @@ class AAPage extends StatefulWidget {
 }
 
 class _AAState extends State<AAPage> {
+
+  FToast fToast = FToast();
+
+  _created() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Achievement created"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _editted() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Achievement updated"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _deleted() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Achievement deleted"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _empty() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Please make sure you fill in the field"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _button(String type) {
+    Widget toast = SizedBox.shrink();
+
+    if(type == "add"){
+      toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.yellow,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.check),
+            SizedBox(
+              width: 12.0,
+            ),
+            Text("Add button pressed"),
+          ],
+        ),
+      );
+    }
+    else if(type == "edit"){
+      toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.yellow,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.check),
+            SizedBox(
+              width: 12.0,
+            ),
+            Text("Edit button pressed"),
+          ],
+        ),
+      );
+    }
+    else{
+      toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.yellow,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.check),
+            SizedBox(
+              width: 12.0,
+            ),
+            Text("Delete button pressed"),
+          ],
+        ),
+      );
+    }
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   // text fields' controllers
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
@@ -89,9 +270,7 @@ class _AAState extends State<AAPage> {
                         // Persist a new product to Firestore
                         await _achievements.add({"title": title, "desc": desc, "condition": condition});
 
-                        // Show a snackbar
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text('Achievement added')));
+                        _created();
                       }
 
                       if (action == 'update') {
@@ -100,9 +279,7 @@ class _AAState extends State<AAPage> {
                             .doc(documentSnapshot!.id)
                             .update({"title": title, "desc": desc, "condition": condition});
 
-                        // Show a snackbar
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text('Achievement updated')));
+                        _editted();
                       }
 
                       // Clear the text fields
@@ -114,11 +291,7 @@ class _AAState extends State<AAPage> {
                       FocusManager.instance.primaryFocus?.unfocus();
                     }
                     else{
-                      const snackBar = SnackBar(
-                        content: Text('Please make sure you fill in the field'),
-                      );
-
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      _empty();
                     }
                   },
                 )
@@ -132,13 +305,12 @@ class _AAState extends State<AAPage> {
   Future<void> _deleteProduct(String aId) async {
     await _achievements.doc(aId).delete();
 
-    // Show a snackbar
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('You have successfully deleted an achievement')));
+    _deleted();
   }
 
   @override
   Widget build(BuildContext context) {
+    fToast.init(context);
     return MaterialApp(
       // Remove the debug banner
       debugShowCheckedModeBanner: false,
@@ -182,11 +354,7 @@ class _AAState extends State<AAPage> {
                                 IconButton(
                                     icon: const Icon(Icons.edit),
                                   onPressed: () async {
-                                    const snackBar = SnackBar(
-                                      content: Text('Button edit achievement pressed'),
-                                    );
-
-                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    _button("edit");
 
                                     _createOrUpdate(document);
                                   },
@@ -196,12 +364,7 @@ class _AAState extends State<AAPage> {
                                 IconButton(
                                   icon: const Icon(Icons.delete),
                                   onPressed: () async {
-                                    const snackBar = SnackBar(
-                                      content: Text('Button delete achievement pressed'),
-                                    );
-
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        snackBar);
+                                    _button("delete");
 
                                     _deleteProduct(document.id);
                                   },
@@ -229,11 +392,7 @@ class _AAState extends State<AAPage> {
         // Add new product
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            const snackBar = SnackBar(
-              content: Text('Button add achievement pressed'),
-            );
-
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            _button("add");
 
             _createOrUpdate();
           },

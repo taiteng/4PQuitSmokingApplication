@@ -99,7 +99,7 @@ class _NBState extends State<NBPage> {
             ),
             ListTile(
               leading: Icon(Icons.airplanemode_on_rounded),
-              title: Text('Demo'),
+              title: Text('Admin'),
               onTap: ()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>Demo())),
             ),
           ],

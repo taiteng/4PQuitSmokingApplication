@@ -1,6 +1,7 @@
 import 'main.dart';
 import 'admin_main.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -31,6 +32,186 @@ class APPage extends StatefulWidget {
 }
 
 class _APState extends State<APPage> {
+
+  FToast fToast = FToast();
+
+  _created() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Pro tip created"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _editted() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Pro tip updated"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _deleted() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Pro tip deleted"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _empty() {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.yellow,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text("Please make sure you fill in the field"),
+        ],
+      ),
+    );
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
+  _button(String type) {
+    Widget toast = SizedBox.shrink();
+
+    if(type == "add"){
+      toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.yellow,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.check),
+            SizedBox(
+              width: 12.0,
+            ),
+            Text("Add button pressed"),
+          ],
+        ),
+      );
+    }
+    else if(type == "edit"){
+      toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.yellow,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.check),
+            SizedBox(
+              width: 12.0,
+            ),
+            Text("Edit button pressed"),
+          ],
+        ),
+      );
+    }
+    else{
+      toast = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.yellow,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.check),
+            SizedBox(
+              width: 12.0,
+            ),
+            Text("Delete button pressed"),
+          ],
+        ),
+      );
+    }
+
+
+    fToast.showToast(
+      child: toast,
+      //gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   final CollectionReference _protips =
   FirebaseFirestore.instance.collection('protips');
 
@@ -84,11 +265,7 @@ class _APState extends State<APPage> {
                         // Persist a new product to Firestore
                         await _protips.add({"title": title, "desc": desc});
 
-                        const snackBar = SnackBar(
-                          content: Text('Pro tip created'),
-                        );
-
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        _created();
                       }
 
                       if (action == 'update') {
@@ -97,11 +274,7 @@ class _APState extends State<APPage> {
                             .doc(documentSnapshot!.id)
                             .update({"title": title, "desc": desc});
 
-                        const snackBar = SnackBar(
-                          content: Text('Pro tip updated'),
-                        );
-
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        _editted();
                       }
 
                       // Clear the text fields
@@ -112,11 +285,7 @@ class _APState extends State<APPage> {
                       FocusManager.instance.primaryFocus?.unfocus();
                     }
                     else{
-                      const snackBar = SnackBar(
-                        content: Text('Please make sure you fill in the field'),
-                      );
-
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      _empty();
                     }
                   },
                 )
@@ -130,13 +299,12 @@ class _APState extends State<APPage> {
   Future<void> _deleteProduct(String aId) async {
     await _protips.doc(aId).delete();
 
-    // Show a snackbar
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('You have successfully deleted a pro tip')));
+    _deleted();
   }
 
   @override
   Widget build(BuildContext context) {
+    fToast.init(context);
     return MaterialApp(
       // Remove the debug banner
       debugShowCheckedModeBanner: false,
@@ -176,11 +344,7 @@ class _APState extends State<APPage> {
                             IconButton(
                               icon: const Icon(Icons.edit),
                               onPressed: () async {
-                                const snackBar = SnackBar(
-                                  content: Text('Button edit pro tip pressed'),
-                                );
-
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                _button("edit");
 
                                 _createOrUpdate(documentSnapshot);
                               },
@@ -190,11 +354,7 @@ class _APState extends State<APPage> {
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () async{
-                                const snackBar = SnackBar(
-                                  content: Text('Button deleted pro tip pressed'),
-                                );
-
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                _button("delete");
 
                                 _deleteProduct(documentSnapshot.id);
                               },
@@ -217,11 +377,7 @@ class _APState extends State<APPage> {
         // Add new product
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            const snackBar = SnackBar(
-              content: Text('Button add pro tip pressed'),
-            );
-
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            _button("add");
 
             _createOrUpdate();
           },

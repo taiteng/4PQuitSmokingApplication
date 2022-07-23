@@ -93,7 +93,7 @@ class AdminMainState extends State<AdminMain>{
     const InitializationSettings initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid);
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+        await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     AndroidNotificationChannel channel =
         const AndroidNotificationChannel(

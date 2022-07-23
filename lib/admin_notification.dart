@@ -13,13 +13,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
+  debugPrint('Handling a background message ${message.messageId}');
 }
+
 
 Future <void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   runApp(const MyApp());
 }
 
@@ -36,17 +38,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: adminMain(),
+      home: const AdminMain(),
     );
   }
 }
 
-class adminMain extends StatefulWidget {
+class AdminMain extends StatefulWidget {
+  const AdminMain({Key? key}) : super(key: key);
+
   @override
-  State<adminMain> createState() => adminMainState();
+  State<AdminMain> createState() => AdminMainState();
 }
 
-class adminMainState extends State<adminMain>{
+class AdminMainState extends State<AdminMain>{
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   final _usernameController  = TextEditingController();
@@ -68,9 +72,47 @@ class adminMainState extends State<adminMain>{
     listenFCM();
   }
 
+  //Store the user's device token to the Firestore
+  Future<void> storeToken(String? token) async{
+    await Firebase.initializeApp();
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String? uname = user?.displayName.toString();
+
+    final _storeToken = FirebaseFirestore.instance.collection("deviceToken").doc(uname);
+    await _storeToken.set({"deviceToken": token});
+
+    debugPrint(token);
+  }
+  void sendNotification({String? title, String? desc})async{
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid);
+
+        await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    AndroidNotificationChannel channel =
+        const AndroidNotificationChannel(
+            'high_channel',
+            'High Importance Notification',
+            description: "This channel is my channel",
+            importance: Importance.max);
+
+    flutterLocalNotificationsPlugin.show(0, title, desc, NotificationDetails(
+      android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          icon: 'ic_launcher',
+      )
+    ));
+  }
   void requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
-
+    await FirebaseMessaging.instance.setAutoInitEnabled(true);
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
       announcement: false,
@@ -82,48 +124,42 @@ class adminMainState extends State<adminMain>{
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      debugPrint('User granted permission');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      debugPrint('User granted provisional permission');
     } else {
-      print('User declined or has not accepted permission');
+      debugPrint('User declined or has not accepted permission');
     }
   }
-
-
   void listenFCM() async{
 
-    final AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    final IOSInitializationSettings initializationSettingsIOS =
-    IOSInitializationSettings(
-        requestSoundPermission: false,
-        requestBadgePermission: false,
-        requestAlertPermission: false
-    );
 
-    final InitializationSettings initializationSettings =
-    InitializationSettings(
-        android: initializationSettingsAndroid,
-        iOS: initializationSettingsIOS
-    );
-
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
 
-      if (message.notification != null) {
-        final snackBar = SnackBar(
-          content: Text(message.notification?.title ?? '', maxLines: 2),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-
       if (notification != null && android != null && !kIsWeb) {
+        const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+        const IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings(
+            requestSoundPermission: false,
+            requestBadgePermission: false,
+            requestAlertPermission: false
+        );
+
+        const InitializationSettings initializationSettings =
+        InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS
+        );
+
+        await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
           notification.title,
@@ -138,7 +174,7 @@ class adminMainState extends State<adminMain>{
               icon: 'ic_launcher',
 
             ),
-            iOS: IOSNotificationDetails(
+            iOS: const IOSNotificationDetails(
               sound: 'default.wav',
               presentAlert: true,
               presentBadge: true,
@@ -149,13 +185,12 @@ class adminMainState extends State<adminMain>{
       }
     });
   }
-
   void loadFCM() async{
     if (!kIsWeb) {
       channel = const AndroidNotificationChannel(
         'high_importance_channel', // id
         'High Importance Notifications', // title
-        importance: Importance.high,
+        importance: Importance.max,
         enableVibration: true,
       );
 
@@ -178,71 +213,22 @@ class adminMainState extends State<adminMain>{
         badge: true,
         sound: true,
       );
+
     }
   }
 
-
-
-  //Store the user's device token to the Firestore
-  Future<String?> storeToken(String? token) async{
-    await Firebase.initializeApp();
-    final User? user = FirebaseAuth.instance.currentUser;
-    final String? uname = user?.displayName.toString();
-
-    final _storeToken = FirebaseFirestore.instance.collection("deviceToken").doc(uname);
-    await _storeToken.set({"deviceToken": token});
-  }
-
-
-
   //Store the input notification from admin to firestore
-  Future<void> publishNotification(String title, String desc,String username) async{
+  void publishNotification(String title, String desc,String username) async{
     await Firebase.initializeApp();
-
-    // final _storeNotification = FirebaseFirestore.instance
-    //     .collection("notification")
-    //     .doc();
-    //
-    // await _storeNotification.set({"title": title, "description": desc});
-    // print("Notification Created");
 
     DocumentSnapshot snapshot =
-        (await FirebaseFirestore.instance.collection("deviceToken").doc("null").get()) as DocumentSnapshot<Object?>;
+        (await FirebaseFirestore.instance.collection("deviceToken").doc(username).get());
 
     String token = snapshot['deviceToken'];
 
-    print(token);
+    debugPrint(token);
 
-    // final data = {
-    //   'click_action' : 'FLUTTER_NOTIFICATION_CLICK',
-    //   'id': 1,
-    //   'status': 'done',
-    //   'message': title,
-    // };
-    //
-    // try{
-    //   http.Response response = await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),headers: <String,String>{
-    //     'Content-Type': 'application/json',
-    //     'Authorization': 'key=AAAAnGRnn1s:APA91bGVpUM9UDojflW5aNs3Z_Qcu8ZsRspmqOuZRDvh9jsTnKWfb2EbFUxNBiqLVWu-edtaXu_w6EjpHDDQqtu3BHPNRdlBAx48ofDe5XxbMnFP5xXn1PWbV7HT0i6gPg1VxHD-BC0E'
-    // });
-    //   body: jsonEncode(<String,dynamic>{
-    //     'notification': <String,dynamic>{'title': title, 'body': 'hello'},
-    //     'priority': 'high',
-    //     'data': data,
-    //     'to': token,
-    //   });
-    //
-    //   if(response.statusCode == 200){
-    //     print("Notification SUCCESS!!!");
-    //   }else{
-    //     print(response.statusCode);
-    //     print("FAIL notification");
-    //   }
-    //
-    // }catch(e){
-    //   print(e);
-    // }
-
+    String tok = "cgPxYmWgQ-y3g9loWlJqMD:APA91bEa1Y0pxQ39fmGnPUHpfMlwBEstpVA7_D1G9pCk15iNZiIMNisrwBDEYvkNZvBr7y39bM6brlCxEPPcXWNxUD-T0gH8eXUvSlXg840-ltf9L8Q5l3ln4aFNxZyxYkX1sJNQB2ov";
     try {
       await http.post(
         Uri.parse('https://fcm.googleapis.com/fcm/send'),
@@ -262,36 +248,42 @@ class adminMainState extends State<adminMain>{
               'id': '1',
               'status': 'done'
             },
-            "to": token,
+            "to": tok,
           },
         ),
       );
     } catch (e) {
-      print("error push notification");
+      debugPrint("error push notification");
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tween - Push Notifications"),
+        title: const Text("Tween - Push Notifications"),
         backgroundColor: Colors.red[600],
         automaticallyImplyLeading: true,
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: <Widget>[
 
+
               //Specific User Container
-              Container(
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+
                 child: TextFormField(
                   controller: _usernameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'User',
                     border: OutlineInputBorder(),
                     hintText: "username...",
@@ -302,14 +294,16 @@ class adminMainState extends State<adminMain>{
 
               //Title Container
               Container(
-                padding: EdgeInsets.only(top: 15),
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                padding: const EdgeInsets.only(top: 15),
 
                 child: TextFormField(
                   controller: _titleController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Title',
                     border: OutlineInputBorder(),
-                    hintText: "Maintainance, New Updates...",
+                    hintText: "Maintenance, New Updates...",
                     hintStyle: TextStyle(fontSize: 13),
                   ),
                 ),
@@ -318,11 +312,11 @@ class adminMainState extends State<adminMain>{
 
               //Description Container
               Container(
-                padding: EdgeInsets.only(top: 15),
+                padding: const EdgeInsets.only(top: 15),
 
                 child: TextFormField(
                   controller: _descriptionController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Description',
                     border: OutlineInputBorder(),
                     hintText: "There will be a new updates in the upcoming months....",
@@ -334,29 +328,28 @@ class adminMainState extends State<adminMain>{
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 50,
-                padding: EdgeInsets.only(top: 15),
+                padding: const EdgeInsets.only(top: 15),
 
                 child: ElevatedButton.icon(
-                  onPressed: () async{
-                    final username = _descriptionController.text;
+                  onPressed: () {
+                    final username = _usernameController.text;
                     final title = _titleController.text;
                     final desc = _descriptionController.text;
 
                     if(title != "" && desc != ""){
-
-                      publishNotification(title, desc, username); //Set to the firestore
+                      publishNotification(title, desc, username); //Set to the FireStore
                       _titleController.clear();
                       _descriptionController.clear();
                       _usernameController.clear();
                     }else{
-                      print("Title and Description might be empty?");
+                      debugPrint("Title and Description might be empty?");
                     }
 
                   },
-                  icon: Icon(Icons.send, size: 18),
-                  label: Text("Send"),
+                  icon: const Icon(Icons.send, size: 18),
+                  label: const Text("Send"),
                   style: ElevatedButton.styleFrom(
-                    textStyle: TextStyle(fontSize: 15),
+                    textStyle: const TextStyle(fontSize: 15),
                   )
                 ),
               ),

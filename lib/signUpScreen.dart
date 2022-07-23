@@ -552,7 +552,127 @@ class _signUpScreenState extends State<signUpScreen>{
                           ),
                         ),
                       ),
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => SurveyQ1()));
+        },
+        padding: EdgeInsets.all(15),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15)
+        ),
+        color: Colors.white,
+        child: Text(
+          'Sign Up',
+          style: TextStyle(
+              color: Color(0xff5ac18e),
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+      ),
+    );
+  }
+  Widget buildFacebook(){
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 25),
+      width: double.infinity,
+      child: RaisedButton(
+        elevation: 5,
+        onPressed: ()=>_signUpWithFacebook()
+        ,
+        padding: EdgeInsets.all(15),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15)
+        ),
+        color: Colors.white,
+        child: Text(
+          'Sign Up with Facebook',
+          style: TextStyle(
+              color: Color(0xff5ac18e),
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+      ),
+    );
+  }
+  void _signUpWithFacebook() async{
+    setState((){loading = true;});
+    try{
+      final facebookLoginResult= await FacebookAuth.instance.login();
+      final userData= await FacebookAuth.instance.getUserData();
+      final facebookAuthCredential= FacebookAuthProvider.credential(facebookLoginResult.accessToken!.token);
+      await Firebase.initializeApp();
+      await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+      await FirebaseFirestore.instance.collection('users').add({
+        'email':userData['email'],
+        'imageUrl': userData['picture']['data']['url'],
+        'name': userData['name'],
 
+      });
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MyHomePage(title: 'Login',) ), (route) => false);
+
+    } on Exception catch(e){
+      showDialog(context: context, builder: (context)=>AlertDialog(
+        title: Text('Log in with Facebook failed'),
+        content: Text('Login failed!'+e.toString()),
+        actions: [TextButton(onPressed: (){
+          Navigator.of(context).pop();
+        }, child: Text('Ok'))],
+
+      ));
+    }finally{
+      setState((){loading = false;});
+    }
+  }
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light,
+        child: GestureDetector(
+          child: Stack(
+            children: <Widget>[
+              Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color(0xFFE53935),
+                            Color(0xFFE53935),
+                            Color(0xFFE53935),
+                            Color(0xFFE53935),
+                          ]
+                      )
+                  ),
+                  child:SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 25,
+                        vertical: 120
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Sign Up',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold
+                          ),),
+                        SizedBox(height: 50),
+                        buildUsername(),
+
+                        SizedBox(height: 20),
+                        buildEmail(),
+                        SizedBox(height: 20),
+                        buildPassword(),
+                        SizedBox(height: 20),
+                        buildReconfirmPassword(),
+                        buildSignUpBtn(),
                         buildFacebook()
                       ],
                     ),
@@ -562,7 +682,7 @@ class _signUpScreenState extends State<signUpScreen>{
             ],
           ),
         ),
-      )
+      ),
     );
   }
 }

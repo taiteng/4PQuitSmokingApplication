@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:quit_smoking/main.dart';
-import 'surveyQ1.dart';
 import 'loginScreen.dart';
 
 Future main() async{
@@ -25,13 +24,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),
+      home: const SplashScreen(),
       //home:  MyHomePage(title: 'Quit Smoking App'),
     );
   }
 }
 
 class SplashScreen extends StatefulWidget{
+  const SplashScreen({Key? key}) : super(key: key);
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -45,14 +46,14 @@ class _SplashScreenState extends State<SplashScreen>{
         .authStateChanges()
         .listen((User? user) {
       if (user == null) {
-        Timer(Duration(seconds:3),()
+        Timer(const Duration(seconds:3),()
         {
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => loginScreen()));
         });
        } else {
-        Timer(Duration(seconds:3),(){
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MyHomePage(title: 'Login',) ), (route) => false);
+        Timer(const Duration(seconds:3),(){
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> const MyHomePage(title: 'Login',) ), (route) => false);
         });
       }
     });
@@ -70,8 +71,8 @@ class _SplashScreenState extends State<SplashScreen>{
           children: [
             //logo
             Image.asset('assets/images/quit-smoking.jpg', height: 120,),
-            SizedBox(height: 20,),
-            CircularProgressIndicator(
+            const SizedBox(height: 20,),
+            const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation(Colors.white),
             )
           ],
@@ -81,50 +82,4 @@ class _SplashScreenState extends State<SplashScreen>{
   }
 }
 
-class _MyHomePage extends StatefulWidget {
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-
-        title: Text("Quit Smoking"),
-      ),
-      body: Center(
-
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}

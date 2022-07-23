@@ -64,10 +64,12 @@ class _APState extends State<APPage> {
                 TextField(
                   controller: _titleController,
                   decoration: const InputDecoration(labelText: 'Title'),
+                  key: const ValueKey("txt_title"),
                 ),
                 TextField(
                   controller: _descController,
                   decoration: const InputDecoration(labelText: 'Description'),
+                  key: const ValueKey("txt_desc"),
                 ),
                 const SizedBox(
                   height: 20,
@@ -155,11 +157,13 @@ class _APState extends State<APPage> {
                             IconButton(
                               icon: const Icon(Icons.edit),
                               onPressed: () => _createOrUpdate(documentSnapshot),
+                              key: const ValueKey("edit_btn"),
                             ),
                             // This icon button is used to delete a single product
                             IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () => _deleteProduct(documentSnapshot.id),
+                              key: const ValueKey("dlt_btn"),
                             ),
                           ],
                         ),
@@ -179,6 +183,7 @@ class _APState extends State<APPage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () => _createOrUpdate(),
           child: const Icon(Icons.add),
+          key: const ValueKey("add_btn"),
         ),
       ),
     );

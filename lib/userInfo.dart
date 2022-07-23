@@ -118,4 +118,6 @@ class getUserInfo{
 
     return time.toString();
   }
+
+  //void
 }

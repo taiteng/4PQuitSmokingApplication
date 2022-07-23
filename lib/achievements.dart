@@ -92,6 +92,10 @@ class _AState extends State<APage> {
                     if (title != null && desc != null && condition != null) {
                       await _achievements.add({"title": title, "desc": desc, "condition": condition});
 
+                      // Show a snackbar
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Achievement added')));
+
                       // Clear the text fields
                       _titleController.text = '';
                       _descController.text = '';
@@ -99,6 +103,13 @@ class _AState extends State<APage> {
 
                       // Hide the bottom sheet
                       FocusManager.instance.primaryFocus?.unfocus();
+                    }
+                    else{
+                      const snackBar = SnackBar(
+                        content: Text('Please make sure you fill in the field'),
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   },
                 )
@@ -178,14 +189,26 @@ class _AState extends State<APage> {
             bool isPro = true;
             if(data){
               return FloatingActionButton(
-                onPressed: () => _create(),
+                onPressed: () async{
+                  // Show a snackbar
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Button add achievement pressed')));
+
+                  _create();
+                },
                 child: const Icon(Icons.add),
                 key: const ValueKey("add_btn"),
               );
             }
             else{
               return FloatingActionButton(
-                onPressed: () => _notValidated(),
+                onPressed: () async{
+                  // Show a snackbar
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Button add achievement pressed')));
+
+                  _notValidated();
+                },
                 child: const Icon(Icons.add),
                 key: const ValueKey("add_btn"),
               );

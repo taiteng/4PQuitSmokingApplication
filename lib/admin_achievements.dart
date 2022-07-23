@@ -88,6 +88,10 @@ class _AAState extends State<AAPage> {
                       if (action == 'create') {
                         // Persist a new product to Firestore
                         await _achievements.add({"title": title, "desc": desc, "condition": condition});
+
+                        // Show a snackbar
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Achievement added')));
                       }
 
                       if (action == 'update') {
@@ -95,6 +99,10 @@ class _AAState extends State<AAPage> {
                         await _achievements
                             .doc(documentSnapshot!.id)
                             .update({"title": title, "desc": desc, "condition": condition});
+
+                        // Show a snackbar
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Achievement updated')));
                       }
 
                       // Clear the text fields
@@ -104,6 +112,13 @@ class _AAState extends State<AAPage> {
 
                       // Hide the bottom sheet
                       FocusManager.instance.primaryFocus?.unfocus();
+                    }
+                    else{
+                      const snackBar = SnackBar(
+                        content: Text('Please make sure you fill in the field'),
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   },
                 )
@@ -166,12 +181,31 @@ class _AAState extends State<AAPage> {
                                 // Press this button to edit a single product
                                 IconButton(
                                     icon: const Icon(Icons.edit),
-                                    onPressed: () => _createOrUpdate(document),
+                                  onPressed: () async {
+                                    const snackBar = SnackBar(
+                                      content: Text('Button edit achievement pressed'),
+                                    );
+
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                                    _createOrUpdate(document);
+                                  },
+                                  key: const ValueKey("edit_btn"),
                                 ),
                                 // This icon button is used to delete a single product
                                 IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () => _deleteProduct(document.id),
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () async {
+                                    const snackBar = SnackBar(
+                                      content: Text('Button delete achievement pressed'),
+                                    );
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        snackBar);
+
+                                    _deleteProduct(document.id);
+                                  },
+                                  key: const ValueKey("dlt_btn"),
                                 ),
                               ],
                             ),
@@ -194,8 +228,17 @@ class _AAState extends State<AAPage> {
         ),
         // Add new product
         floatingActionButton: FloatingActionButton(
-          onPressed: () => _createOrUpdate(),
+          onPressed: () async {
+            const snackBar = SnackBar(
+              content: Text('Button add achievement pressed'),
+            );
+
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+            _createOrUpdate();
+          },
           child: const Icon(Icons.add),
+          key: const ValueKey("add_btn"),
         ),
       ),
     );

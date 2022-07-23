@@ -9,7 +9,17 @@ import 'package:quit_smoking/main.dart';
 import 'surveyQ1.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-
+class usernameFieldValidator{
+  static String? validate(String value){
+    if(value.isEmpty)
+      return 'Username must be filled';
+    else if(!value.isEmpty && !RegExp(r'^[a-z A-Z]+$').hasMatch(value)){
+      return "Enter correct name";
+    }else{
+      return null;
+    }
+    }
+}
 
 class signUpScreen extends StatefulWidget{
 
@@ -329,241 +339,229 @@ class _signUpScreenState extends State<signUpScreen>{
   Widget build(BuildContext context){
     return Scaffold(
 
-        body: Form(
-          key: formkey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: GestureDetector(
-            child: Stack(
-              children: <Widget>[
-                Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color(0xFFE53935),
-                              Color(0xFFE53935),
-                              Color(0xFFE53935),
-                              Color(0xFFE53935),
-                            ]
-                        )
+      body: Form(
+        key: formkey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: GestureDetector(
+          child: Stack(
+            children: <Widget>[
+              Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color(0xFFE53935),
+                            Color(0xFFE53935),
+                            Color(0xFFE53935),
+                            Color(0xFFE53935),
+                          ]
+                      )
+                  ),
+                  child:SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 25,
+                        vertical: 120
                     ),
-                    child:SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 25,
-                          vertical: 120
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Sign Up',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold
+                          ),),
+                        SizedBox(height: 50),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Sign Up',
+                          Text(
+                            'Username',
                             style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 40,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold
-                            ),),
-                          SizedBox(height: 50),
-
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Username',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold
-                                ),
-
-                              ),
-                              SizedBox(height: 10),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow:[
-                                      BoxShadow(
-                                          color: Colors.black26,
-                                          blurRadius: 6,
-                                          offset: Offset(0,2)
-                                      )
-                                    ]
-                                ),
-                                height: 60,
-                                child: TextFormField(
-                                  controller: usernameController,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.people),
-                                    labelText: 'Username',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  validator: (value){
-                                    if(value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)){
-                                      return "Enter correct name";
-                                    }else{
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
-
-                          SizedBox(height: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Email',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold
-                                ),
-
-                              ),
-                              SizedBox(height: 10),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow:[
-                                      BoxShadow(
-                                          color: Colors.black26,
-                                          blurRadius: 6,
-                                          offset: Offset(0,2)
-                                      )
-                                    ]
-                                ),
-                                height: 60,
-                                child: TextFormField(
-                                  controller: emailController,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.mail),
-                                    labelText: 'Email',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  validator: (value){
-                                    if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value)){
-                                      return "Enter correct email";
-                                    }else{
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Password',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold
-                                ),
-
-                              ),
-                              SizedBox(height: 10),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow:[
-                                      BoxShadow(
-                                          color: Colors.black26,
-                                          blurRadius: 6,
-                                          offset: Offset(0,2)
-                                      )
-                                    ]
-                                ),
-                                height: 60,
-                                child: TextFormField(
-                                  controller: passwordController,
-                                  obscureText: true,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.password),
-                                    labelText: 'Password',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  validator: (value){
-                                    if(value != null && value.length<8){
-                                      return 'Enter min. 8 characters';
-                                    }else{
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 20),
-
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 25),
-                            width: double.infinity,
-                            child: RaisedButton(
-                              elevation: 5,
-                              onPressed: () async {
-                                if(!formkey.currentState!.validate()){
-                                  return;
-                                }
-                                UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                                User? user = result.user;
-                                user?.updateProfile(displayName: "Beta Tester", photoURL: "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png");
-
-                                FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-
-
-                                await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid).set({
-
-                                  'email':emailController.text,
-                                  'isAdmin':'false',
-                                  'isPro':'false',
-                                  'password':passwordController.text,
-                                  'username':usernameController.text
-
-                                });
-
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(builder: (_) => SurveyQ1()));
-                              },
-                              padding: EdgeInsets.all(15),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)
-                              ),
-                              color: Colors.white,
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                    color: Color(0xff5ac18e),
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
                             ),
-                          ),
 
-                          buildFacebook()
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow:[
+                                  BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 6,
+                                      offset: Offset(0,2)
+                                  )
+                                ]
+                            ),
+                            height: 60,
+                            child: TextFormField(
+                              controller: usernameController,
+                              decoration: const InputDecoration(
+                                prefixIcon: Icon(Icons.people),
+                                labelText: 'Username',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value){
+                                  return usernameFieldValidator.validate(value!);
+                              },
+                            ),
+                          )
                         ],
                       ),
-                    )
 
-                )
-              ],
-            ),
+                        SizedBox(height: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Email',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold
+                            ),
+
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow:[
+                                  BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 6,
+                                      offset: Offset(0,2)
+                                  )
+                                ]
+                            ),
+                            height: 60,
+                            child: TextFormField(
+                              controller: emailController,
+                              decoration: const InputDecoration(
+                                prefixIcon: Icon(Icons.mail),
+                                labelText: 'Email',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value){
+                                return emailFieldValidator.validate(value!);
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                        SizedBox(height: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Password',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold
+                            ),
+
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow:[
+                                  BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 6,
+                                      offset: Offset(0,2)
+                                  )
+                                ]
+                            ),
+                            height: 60,
+                            child: TextFormField(
+                              controller: passwordController,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                prefixIcon: Icon(Icons.password),
+                                labelText: 'Password',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value){
+                                return passwordFieldValidator.validate(value!);
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                        SizedBox(height: 20),
+
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 25),
+                        width: double.infinity,
+                        child: RaisedButton(
+                          elevation: 5,
+                          onPressed: () async {
+                            if(!formkey.currentState!.validate()){
+                              return;
+                            }
+                            UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+                            User? user = result.user;
+                            user?.updateProfile(displayName: "Beta Tester", photoURL: "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png");
+
+                            FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+
+                            await FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid).set({
+
+                              'email':emailController.text,
+                              'isAdmin':'false',
+                              'isPro':'false',
+                              'password':passwordController.text,
+                              'username':usernameController.text
+
+                            });
+
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (_) => SurveyQ1()));
+                          },
+                          padding: EdgeInsets.all(15),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)
+                          ),
+                          color: Colors.white,
+                          child: Text(
+                            'Sign Up',
+                            style: TextStyle(
+                                color: Color(0xff5ac18e),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                      ),
+
+                        buildFacebook()
+                      ],
+                    ),
+                  )
+
+              )
+            ],
           ),
-        )
+        ),
+      )
     );
   }
 }
+
 

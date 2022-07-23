@@ -10,7 +10,29 @@ import 'package:quit_smoking/admin_main.dart';
 import 'package:quit_smoking/main.dart';
 import 'package:quit_smoking/signUpScreen.dart';
 
+class emailFieldValidator{
+  static String? validate(String value){
+    if(value.isEmpty)
+    return 'Email must be filled';
+    else if(!value.isEmpty && !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value)){
+      return "Enter correct email";
+    }else{
+      return null;
+    }
+  }
+}
 
+class passwordFieldValidator{
+  static String? validate(String value){
+    if(value.isEmpty)
+      return 'Password must be filled';
+    if(value != null && value.length<8){
+      return 'Enter min. 8 characters';
+    }else{
+      return null;
+    }
+  }
+}
 
 class loginScreen extends StatefulWidget{
 
@@ -20,7 +42,9 @@ class loginScreen extends StatefulWidget{
 }
 
 
+
 class _LoginScreenState extends State<loginScreen>{
+
   final GlobalKey<FormState> formkey=GlobalKey<FormState>();
   var isAdmin;
   final emailController=TextEditingController();
@@ -467,11 +491,7 @@ class _LoginScreenState extends State<loginScreen>{
                                 border: OutlineInputBorder(),
                               ),
                               validator: (value){
-                                if(value != null && value.length<8){
-                                  return 'Enter min. 8 characters';
-                                }else{
-                                  return null;
-                                }
+                                return passwordFieldValidator.validate(value!);
                               },
                             ),
                           )
@@ -490,27 +510,9 @@ class _LoginScreenState extends State<loginScreen>{
                               return;
                             }
                             FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                            CollectionReference user=FirebaseFirestore.instance.collection('user');
-                            FutureBuilder<DocumentSnapshot>(
-                              future: user.doc(FirebaseAuth.instance.currentUser?.uid).get(),
-                              builder: (BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot){
-                                if(snapshot.connectionState==ConnectionState.done){
-                                  Map<String, dynamic> data=snapshot.data!.data() as Map<String,dynamic>;
-                                  isAdmin = data['isAdmin'].toString();
 
-                            }
-
-                                return Text("Loading");
-                            },
-                            );
-                            if(isAdmin=='false'){
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(builder: (_) => MyHomePage(title: 'Login',)));
-                            }else if(isAdmin=='false'){
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(builder: (_) => adminMain()));
-
-                            }
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (_) => MyHomePage(title: 'Login',)));
                           },
                           padding: EdgeInsets.all(15),
                           shape: RoundedRectangleBorder(

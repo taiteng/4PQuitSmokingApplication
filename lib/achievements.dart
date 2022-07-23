@@ -63,10 +63,12 @@ class _AState extends State<APage> {
                 TextField(
                   controller: _titleController,
                   decoration: const InputDecoration(labelText: 'Title'),
+                  key: const ValueKey("txt_title"),
                 ),
                 TextField(
                   controller: _descController,
                   decoration: const InputDecoration(labelText: 'Description'),
+                  key: const ValueKey("txt_desc"),
                 ),
                 TextField(
                   keyboardType:
@@ -75,6 +77,7 @@ class _AState extends State<APage> {
                   decoration: const InputDecoration(
                     labelText: 'Condition',
                   ),
+                  key: const ValueKey("txt_condition"),
                 ),
                 const SizedBox(
                   height: 20,
@@ -177,12 +180,14 @@ class _AState extends State<APage> {
               return FloatingActionButton(
                 onPressed: () => _create(),
                 child: const Icon(Icons.add),
+                key: const ValueKey("add_btn"),
               );
             }
             else{
               return FloatingActionButton(
                 onPressed: () => _notValidated(),
                 child: const Icon(Icons.add),
+                key: const ValueKey("add_btn"),
               );
             }
           }

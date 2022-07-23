@@ -155,12 +155,14 @@ class _ChatState extends State<ChatPage> {
                             hintStyle: TextStyle(color: Colors.black54),
                             border: InputBorder.none
                         ),
+                        key: const ValueKey("txt_send"),
                       ),
                     ),
                     SizedBox(width: 15,),
                     FloatingActionButton(
                       child: Icon(Icons.send,color: Colors.white,size: 18,),
                       backgroundColor: Colors.blue,
+                      key: const ValueKey("send_btn"),
                       elevation: 0,
                       onPressed: () async{
                         FocusManager.instance.primaryFocus?.unfocus();

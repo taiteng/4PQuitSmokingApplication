@@ -143,8 +143,9 @@ class _ProState extends State<ProPage> {
                                 Text("No Ads", style: TextStyle(color: Colors.black54,),),
                                 Text("Unlock more achievements and the ability to create new achievements", style: TextStyle(color: Colors.black54,),),
                                 IconButton(
-                                    onPressed: () => ToPro(),
-                                    icon: Icon(Icons.add_shopping_cart),
+                                  onPressed: () => ToPro(),
+                                  icon: Icon(Icons.add_shopping_cart),
+                                  key: const ValueKey("pro_btn"),
                                 ),
                               ],
                             ),

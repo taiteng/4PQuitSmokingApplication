@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'admin_achievements.dart';
+import 'admin_notification.dart';
 import 'admin_protips.dart';
 
 Future <void> main() async{
@@ -55,107 +56,120 @@ class adminMainState extends State<adminMain>{
 
               children: <Widget>[
 
-                //First row Container as achievement
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.red[900],
-                    border: Border.all(
-                      color:Colors.white,
-                      width: 0.1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
+                InkWell(
+
+
+
+                  //First row Container as achievement
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.red[900],
+                      border: Border.all(
+                        color:Colors.white,
+                        width: 0.1,
                       ),
-                    ],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  width: 150,
-                  height: 180,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    width: 150,
+                    height: 180,
 
 
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
-                    children: <Widget>[
-                      Container(
-                        child: IconButton(onPressed: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminA()));
-                        },
-                          icon: Icon(Icons.add_task_outlined),
-                          color: Colors.white,
-                          iconSize: 40,
-                          alignment: Alignment.centerRight,
+                      children: <Widget>[
+                        Container(
+                          child: IconButton(onPressed: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminA()));
+                          },
+                            icon: Icon(Icons.add_task_outlined),
+                            color: Colors.white,
+                            iconSize: 40,
+                            alignment: Alignment.centerRight,
+                          ),
+
                         ),
 
-                      ),
+                        Text("Achievements",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
 
-                      Text("Achievements",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      ),
-
-                    ],
+                      ],
+                    ),
                   ),
+                    onTap:(){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminA()));
+                    }
+
                 ),
 
-                //First row container as notifications
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.red[900],
-                    border: Border.all(
-                      color:Colors.white,
-                      width: 0.1,
+
+                InkWell(
+                  //First row container as notifications
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.red[900],
+                      border: Border.all(
+                        color:Colors.white,
+                        width: 0.1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  width: 150,
-                  height: 180,
+                    width: 150,
+                    height: 180,
 
-                  //First Row of the Container
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //First Row of the Container
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
-                    children: <Widget>[
-                      Container(
-                        child: IconButton(onPressed: (){
-                          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => endSurvey()));
-                        },
-                          icon: Icon(Icons.notification_add_outlined),
-                          color: Colors.white,
-                          iconSize: 40,
-                          alignment: Alignment.centerRight,
+                      children: <Widget>[
+                        Container(
+                          child: IconButton(onPressed: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminMain()));
+                          },
+                            icon: Icon(Icons.notification_add_outlined),
+                            color: Colors.white,
+                            iconSize: 40,
+                            alignment: Alignment.centerRight,
+                          ),
+
                         ),
 
-                      ),
-
-                      Text("Notifications",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                        Text("Notifications",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-
-                    ],
+                      ],
+                    ),
                   ),
-
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminMain()));
+                  },
                 ),
               ],
             ),
@@ -167,56 +181,64 @@ class adminMainState extends State<adminMain>{
 
               children: <Widget>[
 
-                //First row Container as achievement
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.red[900],
-                    border: Border.all(
-                      color:Colors.white,
-                      width: 0.1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  width: 150,
-                  height: 180,
-
-
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                    children: <Widget>[
-                      Container(
-                        child: IconButton(onPressed: (){
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminP()));
-                        },
-                          icon: Icon(Icons.privacy_tip_outlined),
-                          color: Colors.white,
-                          iconSize: 40,
-                          alignment: Alignment.centerRight,
+                InkWell(
+                  child: //First row Container as achievement
+                    Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.red[900],
+                          border: Border.all(
+                            color:Colors.white,
+                            width: 0.1,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(20),
                         ),
+                        width: 150,
+                        height: 180,
 
-                      ),
 
-                      Text("Tips",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                          children: <Widget>[
+                            Container(
+                              child: IconButton(onPressed: (){
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminP()));
+                              },
+                                icon: Icon(Icons.privacy_tip_outlined),
+                                color: Colors.white,
+                                iconSize: 40,
+                                alignment: Alignment.centerRight,
+                              ),
+
+                            ),
+
+                            Text("Tips",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+
+                          ],
                         ),
                       ),
 
-                    ],
-                  ),
+                  onTap:(){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminP()));
+                  }
+
                 ),
+
 
                 //First row container as notifications
                 Container(

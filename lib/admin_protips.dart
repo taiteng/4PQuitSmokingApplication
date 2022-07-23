@@ -83,6 +83,12 @@ class _APState extends State<APPage> {
                       if (action == 'create') {
                         // Persist a new product to Firestore
                         await _protips.add({"title": title, "desc": desc});
+
+                        const snackBar = SnackBar(
+                          content: Text('Pro tip created'),
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
 
                       if (action == 'update') {
@@ -90,6 +96,12 @@ class _APState extends State<APPage> {
                         await _protips
                             .doc(documentSnapshot!.id)
                             .update({"title": title, "desc": desc});
+
+                        const snackBar = SnackBar(
+                          content: Text('Pro tip updated'),
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
 
                       // Clear the text fields
@@ -98,6 +110,13 @@ class _APState extends State<APPage> {
 
                       // Hide the bottom sheet
                       FocusManager.instance.primaryFocus?.unfocus();
+                    }
+                    else{
+                      const snackBar = SnackBar(
+                        content: Text('Please make sure you fill in the field'),
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   },
                 )
@@ -113,7 +132,7 @@ class _APState extends State<APPage> {
 
     // Show a snackbar
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('You have successfully deleted a pro tips.')));
+        content: Text('You have successfully deleted a pro tip')));
   }
 
   @override
@@ -156,13 +175,29 @@ class _APState extends State<APPage> {
                             // Press this button to edit a single product
                             IconButton(
                               icon: const Icon(Icons.edit),
-                              onPressed: () => _createOrUpdate(documentSnapshot),
+                              onPressed: () async {
+                                const snackBar = SnackBar(
+                                  content: Text('Button edit pro tip pressed'),
+                                );
+
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                                _createOrUpdate(documentSnapshot);
+                              },
                               key: const ValueKey("edit_btn"),
                             ),
                             // This icon button is used to delete a single product
                             IconButton(
                               icon: const Icon(Icons.delete),
-                              onPressed: () => _deleteProduct(documentSnapshot.id),
+                              onPressed: () async{
+                                const snackBar = SnackBar(
+                                  content: Text('Button deleted pro tip pressed'),
+                                );
+
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                                _deleteProduct(documentSnapshot.id);
+                              },
                               key: const ValueKey("dlt_btn"),
                             ),
                           ],
@@ -181,7 +216,15 @@ class _APState extends State<APPage> {
         ),
         // Add new product
         floatingActionButton: FloatingActionButton(
-          onPressed: () => _createOrUpdate(),
+          onPressed: () async {
+            const snackBar = SnackBar(
+              content: Text('Button add pro tip pressed'),
+            );
+
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+            _createOrUpdate();
+          },
           child: const Icon(Icons.add),
           key: const ValueKey("add_btn"),
         ),

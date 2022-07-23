@@ -34,6 +34,12 @@ class _ChatState extends State<ChatPage> {
   Future<void> sendMessage(String msg) async{
     DateTime now = DateTime.now();
     await _chat.add({"message": msg, "uid": getUserInfo().getUID().toString(), "uname": getUserInfo().getUName().toString(), "time": now});
+
+    const snackBar = SnackBar(
+      content: Text('Message sent'),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override

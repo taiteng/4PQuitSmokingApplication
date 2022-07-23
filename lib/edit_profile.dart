@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quit_smoking/loginScreen.dart';
+import 'package:quit_smoking/signUpScreen.dart';
 import 'package:quit_smoking/surveyQ1.dart';
 import 'package:quit_smoking/userInfo.dart';
 import 'main.dart';
@@ -13,6 +14,7 @@ class Edit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> formkey=GlobalKey<FormState>();
     final userController=TextEditingController();
     final emailController=TextEditingController();
     final passwordController=TextEditingController();
@@ -39,7 +41,13 @@ class Edit extends StatelessWidget {
             onPressed: ()=>Navigator.pop(context),
           ),
         ),
-        body: Container(
+        body: Form(
+        key: formkey,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
+    child: GestureDetector(
+    child: Stack(
+    children: <Widget>[
+       Container(
           padding: EdgeInsets.only(left: 16,top: 25,right: 16),
           child: ListView(
             children: [
@@ -93,7 +101,7 @@ class Edit extends StatelessWidget {
               ),
               ),
               SizedBox(height: 20),
-              
+
               TextFormField(
                 controller: userController,
                 decoration:  InputDecoration(
@@ -106,11 +114,7 @@ class Edit extends StatelessWidget {
                   ),
                 ),
                 validator: (value){
-                  if(value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)){
-                    return "Enter correct name";
-                  }else{
-                    return null;
-                  }
+                  return usernameFieldValidator.validate(value!);
                 },
               ),
     SizedBox(height: 20),
@@ -126,11 +130,7 @@ class Edit extends StatelessWidget {
                   ),
                 ),
                 validator: (value){
-                  if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value)){
-                    return "Enter correct email";
-                  }else{
-                    return null;
-                  }
+                  return emailFieldValidator.validate(value!);
                 },
               ),
               SizedBox(height: 20),
@@ -146,11 +146,7 @@ class Edit extends StatelessWidget {
                   ),
                 ),
                 validator: (value){
-                  if(value != null && value.length<8){
-                    return 'Enter min. 8 characters';
-                  }else{
-                    return null;
-                  }
+                  return passwordFieldValidator.validate(value!);
                 },
               ),
 
@@ -160,10 +156,15 @@ class Edit extends StatelessWidget {
                 child:RaisedButton(
                   elevation: 5,
                   onPressed: (){
+                    if(!formkey.currentState!.validate()){
+                      return;
+                    }
                     FirebaseAuth.instance.currentUser!.updateEmail(emailController.text);
                     FirebaseAuth.instance.currentUser!.updatePassword(passwordController.text);
                     FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser!.uid).set({
                       'username':userController.text,
+                      'email':emailController,
+
                     });
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>MyHomePage(title: 'Login',)));
 
@@ -185,6 +186,10 @@ class Edit extends StatelessWidget {
               ),
             ],
           ),
+        ),
+    ],
+    ),
+    ),
         ),
 
       ),

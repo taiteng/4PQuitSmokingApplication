@@ -9,7 +9,17 @@ import 'package:quit_smoking/main.dart';
 import 'surveyQ1.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-
+class usernameFieldValidator{
+  static String? validate(String value){
+    if(value.isEmpty)
+      return 'Username must be filled';
+    else if(!value.isEmpty && !RegExp(r'^[a-z A-Z]+$').hasMatch(value)){
+      return "Enter correct name";
+    }else{
+      return null;
+    }
+    }
+}
 
 class signUpScreen extends StatefulWidget{
 
@@ -402,11 +412,7 @@ class _signUpScreenState extends State<signUpScreen>{
                                 border: OutlineInputBorder(),
                               ),
                               validator: (value){
-                                if(value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)){
-                                  return "Enter correct name";
-                                }else{
-                                  return null;
-                                }
+                                  return usernameFieldValidator.validate(value!);
                               },
                             ),
                           )
@@ -449,11 +455,7 @@ class _signUpScreenState extends State<signUpScreen>{
                                 border: OutlineInputBorder(),
                               ),
                               validator: (value){
-                                if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value)){
-                                  return "Enter correct email";
-                                }else{
-                                  return null;
-                                }
+                                return emailFieldValidator.validate(value!);
                               },
                             ),
                           )
@@ -496,11 +498,7 @@ class _signUpScreenState extends State<signUpScreen>{
                                 border: OutlineInputBorder(),
                               ),
                               validator: (value){
-                                if(value != null && value.length<8){
-                                  return 'Enter min. 8 characters';
-                                }else{
-                                  return null;
-                                }
+                                return passwordFieldValidator.validate(value!);
                               },
                             ),
                           )

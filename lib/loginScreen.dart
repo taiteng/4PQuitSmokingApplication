@@ -10,7 +10,29 @@ import 'package:quit_smoking/admin_main.dart';
 import 'package:quit_smoking/main.dart';
 import 'package:quit_smoking/signUpScreen.dart';
 
+class emailFieldValidator{
+  static String? validate(String value){
+    if(value.isEmpty)
+    return 'Email must be filled';
+    else if(!value.isEmpty && !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value)){
+      return "Enter correct email";
+    }else{
+      return null;
+    }
+  }
+}
 
+class passwordFieldValidator{
+  static String? validate(String value){
+    if(value.isEmpty)
+      return 'Password must be filled';
+    if(value != null && value.length<8){
+      return 'Enter min. 8 characters';
+    }else{
+      return null;
+    }
+  }
+}
 
 class loginScreen extends StatefulWidget{
 
@@ -423,11 +445,7 @@ class _LoginScreenState extends State<loginScreen>{
                                 border: OutlineInputBorder(),
                               ),
                               validator: (value){
-                                if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}').hasMatch(value)){
-                                  return "Enter correct email";
-                                }else{
-                                  return null;
-                                }
+                                return emailFieldValidator.validate(value!);
                               },
                             ),
                           )
@@ -470,11 +488,7 @@ class _LoginScreenState extends State<loginScreen>{
                                 border: OutlineInputBorder(),
                               ),
                               validator: (value){
-                                if(value != null && value.length<8){
-                                  return 'Enter min. 8 characters';
-                                }else{
-                                  return null;
-                                }
+                                return passwordFieldValidator.validate(value!);
                               },
                             ),
                           )

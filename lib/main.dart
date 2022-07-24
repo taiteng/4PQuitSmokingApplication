@@ -135,9 +135,9 @@ class _MyHomePageState extends State<MyHomePage> {
   //Store the user's device token to the Firestore
   Future<String?> storeToken(String? token) async{
     final User? user = FirebaseAuth.instance.currentUser;
-    final String? uname = user?.displayName.toString();
+    final String? uid = user?.uid.toString();
 
-    final _storeToken = FirebaseFirestore.instance.collection("deviceToken").doc(uname);
+    final _storeToken = FirebaseFirestore.instance.collection("deviceToken").doc(uid);
     await _storeToken.set({"deviceToken": token});
   }
 

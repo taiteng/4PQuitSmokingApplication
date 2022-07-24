@@ -63,26 +63,26 @@ class AdminMainState extends State<AdminMain>{
   @override
   void initState(){
     super.initState();
-    _messaging.getToken().then((token) {
-      storeToken(token);
-    });
+    // _messaging.getToken().then((token) {
+    //   storeToken(token);
+    // });
 
     requestPermission();
     loadFCM();
     listenFCM();
   }
 
-  //Store the user's device token to the Firestore
-  Future<void> storeToken(String? token) async{
-    await Firebase.initializeApp();
-    final User? user = FirebaseAuth.instance.currentUser;
-    final String? uname = user?.displayName.toString();
-
-    final _storeToken = FirebaseFirestore.instance.collection("deviceToken").doc(uname);
-    await _storeToken.set({"deviceToken": token});
-
-    debugPrint(token);
-  }
+  // //Store the user's device token to the Firestore
+  // Future<void> storeToken(String? token) async{
+  //   await Firebase.initializeApp();
+  //   final User? user = FirebaseAuth.instance.currentUser;
+  //   final String? uname = user?.displayName.toString();
+  //
+  //   final _storeToken = FirebaseFirestore.instance.collection("deviceToken").doc(uname);
+  //   await _storeToken.set({"deviceToken": token});
+  //
+  //   debugPrint(token);
+  // }
   void sendNotification({String? title, String? desc})async{
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();

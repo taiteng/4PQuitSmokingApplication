@@ -218,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void startTimer(){
-    timer = Timer.periodic(Duration(seconds:1),(_)=>addTime());
+    timer = Timer.periodic(const Duration(seconds:1),(_)=>addTime());
   }
 
   @override
@@ -251,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   var costPerPack = int.parse(cpp);
                   var quantityPerPack = int.parse(qpp);
 
-                  var moneysaved = ((costPerPack/quantityPerPack)*cigarattesPerDay).toString() ;
+                  var moneysaved = ((costPerPack/quantityPerPack)*cigarattesPerDay).toString();
                   var lifewon = (cigarattesPerDay*11).toString();
 
                   String twoDigits(int n ) => n.toString().padLeft(2,'0');

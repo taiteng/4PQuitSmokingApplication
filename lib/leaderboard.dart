@@ -31,10 +31,8 @@ class _LState extends State<LPage> {
 
   int count = 0;
 
-  int plusCount(count){
+  void plusCount(){
     count++;
-
-    return count;
   }
 
   @override
@@ -67,13 +65,14 @@ class _LState extends State<LPage> {
                 crossAxisCount: 1,
                 childAspectRatio: 5,
                 children: streamSnapshot.data!.docs.map((document) {
+                  count++;
                   return GestureDetector(
                     child: Card(
                       elevation: 3.0,
                       margin: const EdgeInsets.all(10),
                       child: Column(
                         children: [
-                          Text(plusCount(count).toString(), style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
+                          Text(count.toString(), style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
                           Text(document['username'], style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
                           Text(document['time'], style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,),),
                         ],
